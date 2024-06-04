@@ -1,0 +1,30 @@
+{
+  "name": "front_js",
+  "version": "2.0.0",
+  "description": "",
+  "homepage": "https://Wargoth-ks.github.io/front_js",
+  "scripts": {
+    "start": "parcel src/*.html",
+    "build": "parcel build src/*.html --public-url /front_js/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wargoth-ks/front_js.git"
+  },
+  "keywords": [],
+  "author": "Wargoth <wargoth@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wargoth-ks/front_js/issues"
+  },
+  "dependencies": {
+    "modern-normalize": "^1.1.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.6.0",
+    "parcel": "^2.6.0",
+    "parcel-reporter-clean-dist": "^1.0.4",
+    "posthtml-include": "^1.7.4"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead"
+}
