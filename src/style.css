@@ -5,7 +5,6 @@ body {
 }
 
 .container {
-    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
@@ -21,44 +20,8 @@ header {
     z-index: 1000;
 }
 
-
-.js-list ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: -200px;
-}
-
-.js-list ul li {
-    float: left;
-}
-
-.js-list ul li a,
-.js-list ul li button {
-    display: block;
-    color: white;
-    text-align: center;
-    margin-left: 15px;
-    padding: 14px 16px;
-    text-decoration: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.js-list ul li a:hover,
-.js-list ul li button:hover {
-    background-color: #111;
-}
-
 main {
     margin-top: 60px;
-    /* Adjust based on header height */
     padding: 20px;
 }
 
@@ -80,7 +43,6 @@ main {
     margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 90%;
     max-width: 500px;
     display: flex;
     flex-direction: column;
@@ -88,10 +50,10 @@ main {
 }
 
 .close {
-    color: #aaa;
+    color: #a52222;
     align-self: flex-end;
-    font-size: 28px;
-    font-weight: bold;
+    font-size: 40px;
+    font-weight: 900;
 }
 
 .close:hover,
@@ -154,8 +116,8 @@ footer {
     justify-content: center;
 }
 
-
 .menu {
+    /* display: none; */
     position: fixed;
     left: 0;
     top: 0;
@@ -166,10 +128,42 @@ footer {
     justify-content: center;
     background-color: #111;
     transition: 0.5s;
-    transform: translate(-100%);
+    transform: translateX(-100%);
 }
 
+.js-list ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.5s;
+}
 
+.js-list ul li {
+    float: left;
+}
+
+.js-list ul li a,
+.js-list ul li button {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.js-list ul li a:hover,
+.js-list ul li button:hover {
+    background-color: #111;
+}
 
 .menu-list {
     display: flex;
@@ -199,11 +193,10 @@ footer {
     color: red;
 }
 
-
 .menu-active {
-    transform: translate(0%);
+    transform: translateX(0%);
 }
 
-.js-list-active {
-    transform: translate(30%);
+.js-list-move {
+    transform: translateX(30%);
 }
