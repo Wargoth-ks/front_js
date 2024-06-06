@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = 'https://addressbook-wargcorp-8f592fab.koyeb.app/api';
 axios.defaults.baseURL = BASE_URL;
-axios.defaults.headers.get['Content-Type'] = 'application/json';
+// axios.defaults.headers.get['Content-Type'] = 'application/json';
 
 async function getStatusServer() {
     try {
@@ -22,7 +22,6 @@ async function postLoginUser(body) {
     //     password: 'password',
     // };
     const { username, password } = body
-    console.dir(body[username], body[password]);
     try {
         const response = await axios.post(BASE_URL + '/auth/login', {
             username: username,
@@ -32,7 +31,6 @@ async function postLoginUser(body) {
             },
         });
         console.dir(response.data);
-        return response.data
     } catch (error) {
         console.dir(error);
     }
