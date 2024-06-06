@@ -80,20 +80,14 @@ function loginData() {
     loginBtn.addEventListener('click', () => {
         console.dir('Open login form');
         const sendForm = document.querySelector('.form');
-        // sendForm.addEventListener('submit', data => {
-        //     data.preventDefault();
-
-        //     const {
-        //         target: { email, password },
-        //     } = data;
-        //     postLoginUser({
-        //         email: email.value,
-        //         password: password.value,
-        //     });
-        // });
-        sendForm.addEventListener('submit', e => {
-            const data = new FormData(sendForm);
-            console.dir(data);
+        sendForm.addEventListener('submit', data => {
+            const {
+                target: { email, password },
+            } = data;
+            postLoginUser({
+                username: email.value,
+                password: password.value,
+            });
         });
     });
 }
