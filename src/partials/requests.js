@@ -1,18 +1,17 @@
 import axios from 'axios';
 
-axios.defaults.baseURL =
-    'https://addressbook-wargcorp-8f592fab.koyeb.app/api/healthchecker';
+const BASE_URL = 'https://addressbook-wargcorp-8f592fab.koyeb.app/api';
+axios.defaults.baseURL = BASE_URL;
 axios.defaults.headers.get['Content-Type'] = 'application/json';
 
-async function getUser() {
+async function getStatusServer() {
     try {
-        const response = await axios.get();
+        const response = await axios.get(BASE_URL + '/healthchecker');
         console.log(response);
-        return response
+        return response;
     } catch (error) {
         console.error(error);
     }
-    
 }
 
-getUser()
+export {getStatusServer}
