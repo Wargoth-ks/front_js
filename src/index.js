@@ -1,9 +1,5 @@
 // import bootstrap from 'bootstrap'
 
-
-
-// getUser();
-
 //// Menu after login
 // const menuBtn = document.querySelector('.menu-btn')
 // const menuToggle = document.querySelector('.menu')
