@@ -16,19 +16,19 @@ async function getStatusServer() {
 
 
 
-async function postLoginUser(data) {
+async function postLoginUser(body) {
     // data = {
     //     username: 'user',
     //     password: 'password',
     // };
     try {
         const response = await axios.post(BASE_URL + '/auth/login', {
-            data,
+            data: body,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
         });
-        console.dir(response);
+        console.dir(response.data);
         return response.data
     } catch (error) {
         console.dir(error);
