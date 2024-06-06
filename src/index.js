@@ -78,24 +78,24 @@ function loginData() {
     // console.dir(formData);
 
     loginBtn.addEventListener('click', () => {
-        console.dir("Open login form");
+        console.dir('Open login form');
         const sendForm = document.querySelector('.form');
-        sendForm.addEventListener('submit', (data) => {
-            data.preventDefault()
+        // sendForm.addEventListener('submit', data => {
+        //     data.preventDefault();
 
-            const {target: {email, password}} = data
-            postLoginUser({
-                email: email.value,
-                password: password.value
-            })
-            
+        //     const {
+        //         target: { email, password },
+        //     } = data;
+        //     postLoginUser({
+        //         email: email.value,
+        //         password: password.value,
+        //     });
+        // });
+        sendForm.addEventListener('submit', e => {
+            const data = new FormData(sendForm);
+            console.dir(data);
         });
     });
-    // loginForm.addEventListener('submit', (e) => {
-    //     e.preventDefault()
-    //     const data = new FormData(loginForm)
-    //     console.dir(data);
-    // })
 }
 
-loginData()
+loginData();
