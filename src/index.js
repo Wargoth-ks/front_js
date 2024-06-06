@@ -81,13 +81,16 @@ function loginData() {
         console.dir('Open login form');
         const sendForm = document.querySelector('.form');
         sendForm.addEventListener('submit', data => {
+            data.preventDefault()
             const {
                 target: { email, password },
             } = data;
-            postLoginUser({
+            const sendData = {
                 username: email.value,
                 password: password.value,
-            });
+            }
+            // console.dir(sendData);
+            postLoginUser(sendData);
         });
     });
 }
