@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 
 const BASE_URL = 'https://addressbook-wargcorp-8f592fab.koyeb.app/api';
 axios.defaults.baseURL = BASE_URL;
@@ -17,17 +18,12 @@ async function getStatusServer() {
 
 
 async function postLoginUser(body) {
-    // data = {
-    //     username: 'user',
-    //     password: 'password',
-    // };
-    const { username, password } = body
     try {
-        const response = await axios.post(BASE_URL + '/auth/login', {
-            username: username,
-            password: password,
+        const response = await axios('./auth/login', {
+            method: "POST",
+            data: qs.stringify(body),
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'content-type': 'application/x-www-form-urlencoded',
             },
         });
         console.dir(response.data);
