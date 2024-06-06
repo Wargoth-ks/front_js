@@ -21,11 +21,12 @@ async function postLoginUser(body) {
     //     username: 'user',
     //     password: 'password',
     // };
-    const {username, password} = body
+    const { username, password } = body
+    console.dir(body[username], body[password]);
     try {
         const response = await axios.post(BASE_URL + '/auth/login', {
-            username: body[username],
-            password: body[password],
+            username: username,
+            password: password,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
