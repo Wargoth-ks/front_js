@@ -8,9 +8,11 @@ async function getUser() {
     try {
         const response = await axios.get();
         console.log(response);
+        return response
     } catch (error) {
         console.error(error);
     }
+    
 }
 
 getUser()
