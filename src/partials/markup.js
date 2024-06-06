@@ -1,5 +1,4 @@
-const markupModalLogin =
-    `<div class="modal-content">
+const markupModalLogin = `<div class="modal-content">
                 <span class="close" id="loginClose">&times;</span>
                 <h2 class="modal-title">Login</h2>
                 <form class="form">
@@ -21,6 +20,9 @@ const markupModalReg = `<div class="modal-content">
                     <input type="password" id="registerPassword" name="password" required>
                     <label for="confirmPassword">Confirm Password:</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <input type="checkbox" name="" id="idCheckBox">
+                    <label for="avatarImg">Choose image (optional):</label>
+                    <input disabled type="file" name="avatar" id="inputImg" accept="image/png">
                     <button type="submit">Register</button>
                 </form>
             </div>`;

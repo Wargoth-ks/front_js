@@ -47,66 +47,46 @@ btns.forEach((btn, index) => {
                 break;
             case 1:
                 modal.insertAdjacentHTML('afterbegin', markupModalReg);
+                onCheckBox();
                 break;
             default:
                 console.dir(index);
         }
-        
-        const closeModal = modal.querySelector('.close');
-
-        closeModal.addEventListener('click', () => {
-            closeModalHandler(modal)
-        });
-        btn.addEventListener('keydown', e => {
-            // console.dir(e);
-            if (e.code === 'Escape') {
-                closeModalHandler(modal)
-            }
-        });
+        onCloseClickModal(modal);
+        onCloseEscModal(modal);
     });
 });
+
+
+
+
+function onCheckBox() {
+    const inputImg = document.querySelector('#inputImg');
+    const checkBox = document.querySelector('#idCheckBox');
+
+    checkBox.addEventListener('click', function () {
+        inputImg.disabled = !this.checked;
+    });
+}
+
+function onCloseClickModal(modal) {
+    const closeModal = modal.querySelector('.close');
+
+    closeModal.addEventListener('click', () => {
+        closeModalHandler(modal);
+    });
+}
+
+function onCloseEscModal(modal) {
+    document.addEventListener('keydown', e => {
+        // console.dir(e);
+        if (e.code === 'Escape') {
+            closeModalHandler(modal);
+        }
+    });
+}
 
 function closeModalHandler(modal) {
     modal.style.display = 'none';
     modal.innerHTML = '';
 }
-
-// document.addEventListener('DOMContentLoaded', (event) => {
-//     // Get the modal elements
-//     const loginModal = document.getElementById('loginModal');
-//     const registerModal = document.getElementById('registerModal');
-
-//     // Get the buttons that open the modals
-//     const loginBtn = document.getElementById('loginBtn');
-//     const registerBtn = document.getElementById('registerBtn');
-
-//     // Get the <span> elements that close the modals
-//     const loginClose = document.getElementById('loginClose');
-//     const registerClose = document.getElementById('registerClose');
-
-//     // When the user clicks the button, open the modal
-//     loginBtn.onclick = function() {
-//         loginModal.style.display = "block";
-//     }
-//     registerBtn.onclick = function() {
-//         registerModal.style.display = "block";
-//     }
-
-//     // When the user clicks on <span> (x), close the modal
-//     loginClose.onclick = function() {
-//         loginModal.style.display = "none";
-//     }
-//     registerClose.onclick = function() {
-//         registerModal.style.display = "none";
-//     }
-
-//     // When the user clicks anywhere outside of the modal, close it
-//     window.onclick = function(event) {
-//         if (event.target == loginModal) {
-//             loginModal.style.display = "none";
-//         }
-//         if (event.target == registerModal) {
-//             registerModal.style.display = "none";
-//         }
-//     }
-// });
