@@ -1,21 +1,6 @@
 // import bootstrap from 'bootstrap'
-import { getStatusServer } from './partials/requests';
-// import axios from 'axios';
-
-// axios.defaults.baseURL =
-//     'https://addressbook-wargcorp-8f592fab.koyeb.app/api/healthchecker';
-// axios.defaults.headers.get['Content-Type'] = 'application/json';
-
-// async function getUser() {
-//     try {
-//         const response = await axios.get();
-//         console.log(response);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
-
-getStatusServer();
+import { getStatusServer, postLoginUser } from './partials/requests';
+// getStatusServer();
 
 //// Menu after login
 // const menuBtn = document.querySelector('.menu-btn')
@@ -57,9 +42,6 @@ btns.forEach((btn, index) => {
     });
 });
 
-
-
-
 function onCheckBox() {
     const inputImg = document.querySelector('#inputImg');
     const checkBox = document.querySelector('#idCheckBox');
@@ -90,3 +72,30 @@ function closeModalHandler(modal) {
     modal.style.display = 'none';
     modal.innerHTML = '';
 }
+
+function loginData() {
+    const loginBtn = document.querySelector('#loginBtn');
+    // console.dir(formData);
+
+    loginBtn.addEventListener('click', () => {
+        console.dir("Open login form");
+        const sendForm = document.querySelector('.form');
+        sendForm.addEventListener('submit', (data) => {
+            data.preventDefault()
+
+            const {target: {email, password}} = data
+            postLoginUser({
+                email: email.value,
+                password: password.value
+            })
+            
+        });
+    });
+    // loginForm.addEventListener('submit', (e) => {
+    //     e.preventDefault()
+    //     const data = new FormData(loginForm)
+    //     console.dir(data);
+    // })
+}
+
+loginData()
