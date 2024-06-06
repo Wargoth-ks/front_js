@@ -15,21 +15,20 @@ async function getStatusServer() {
     }
 }
 
-
-
-async function postLoginUser(body) {
-    try {
-        const response = await axios('./auth/login', {
-            method: "POST",
-            data: qs.stringify(body),
+async function postLoginUser(data) {
+    await axios
+        .postForm('/auth/login', data, {
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
             },
+        })
+        .then(response => {
+            console.dir(response.data);
+            return response.data;
+        })
+        .catch(error => {
+            console.log(error);
         });
-        console.dir(response.data);
-    } catch (error) {
-        console.dir(error);
-    }
 }
 
 export { getStatusServer, postLoginUser };

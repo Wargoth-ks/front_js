@@ -107,6 +107,12 @@ main {
     background-color: #111;
 }
 
+.form button:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    background-color: #01fc6a
+}
+
 footer {
     background-color: #333;
     color: white;
@@ -226,11 +232,15 @@ footer {
 
 .login-form {
     margin: auto;
-    margin-top: 8%; /* Добавьте нужный вам отступ сверху */
-    width: 80%; /* Или любую другую ширину по вашему выбору */
-    max-width: 500px; /* Максимальная ширина модального окна */
+    margin-top: 8%;
+    /* Добавьте нужный вам отступ сверху */
+    width: 80%;
+    /* Или любую другую ширину по вашему выбору */
+    max-width: 500px;
+    /* Максимальная ширина модального окна */
 }
 
 #loginPassword {
     margin-bottom: 30px;
 }
+

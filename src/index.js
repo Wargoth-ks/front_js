@@ -42,6 +42,8 @@ btns.forEach((btn, index) => {
     });
 });
 
+
+
 function onCheckBox() {
     const inputImg = document.querySelector('#inputImg');
     const checkBox = document.querySelector('#idCheckBox');
@@ -80,18 +82,28 @@ function loginData() {
     loginBtn.addEventListener('click', () => {
         console.dir('Open login form');
         const sendForm = document.querySelector('.form');
-        sendForm.addEventListener('submit', data => {
-            data.preventDefault()
+        const sndBtn = sendForm.lastElementChild;
+        const closeElement = sendForm.parentNode.parentElement;
+
+        // console.dir(sndBtn);
+        sendForm.addEventListener('submit', async data => {
+            data.preventDefault();
             const {
                 target: { email, password },
             } = data;
             const sendData = {
                 username: email.value,
                 password: password.value,
-            }
-            // console.dir(sendData);
+            };
+            // console.dir(sendForm.lastElementChild);
             postLoginUser(sendData);
+
+            sndBtn.setAttribute('disabled', '');
+            email.disabled = true;
+            password.disabled = true;
+            setTimeout(closeModalHandler, 3000, closeElement);
         });
+        // sendForm.lastElementChild.setAttribute('disabled', "")
     });
 }
 
