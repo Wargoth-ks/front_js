@@ -30,23 +30,25 @@ main {
     position: fixed;
     z-index: 1001;
     left: 0;
-    top: 0;
+    /* top: 0; */
     width: 100%;
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    padding-top: 20px;
+    padding-top: 1px;
 }
 
 .modal-content {
     background-color: #fefefe;
     margin: 5% auto;
-    padding: 20px;
+    padding: 15px;
     border: 1px solid #888;
     max-width: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 30%;
+    border-radius: 5%;
 }
 
 .close {
@@ -66,13 +68,13 @@ main {
 .modal-title {
     text-align: center;
     width: 100%;
-    margin-top: -30px;
+    margin-top: -40px;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 70%;
     align-items: center;
 }
 
@@ -80,12 +82,13 @@ main {
     width: 100%;
     text-align: left;
     margin-bottom: 5px;
+
 }
 
 .form input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -199,4 +202,35 @@ footer {
 
 .js-list-move {
     transform: translateX(30%);
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.checkbox-container label {
+    flex: 1;
+    text-align: left;
+    margin-bottom: 0;
+}
+
+.checkbox-container input {
+    margin-left: auto;
+    width: auto;
+    height: auto;
+}
+
+
+.login-form {
+    margin: auto;
+    margin-top: 8%; /* Добавьте нужный вам отступ сверху */
+    width: 80%; /* Или любую другую ширину по вашему выбору */
+    max-width: 500px; /* Максимальная ширина модального окна */
+}
+
+#loginPassword {
+    margin-bottom: 30px;
 }
