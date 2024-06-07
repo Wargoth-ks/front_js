@@ -144,8 +144,6 @@ footer {
     z-index: 1001;
 }
 
-
-
 .menu-list {
     display: flex;
     justify-content: space-around;
@@ -261,4 +259,32 @@ footer {
 
 #loginPassword {
     margin-bottom: 30px;
+}
+
+
+@media screen and (max-width: 600px) {
+    .menu {
+        width: 100%;
+        /* Увеличиваем ширину меню до 100% */
+    }
+}
+
+#form-search-input {
+    width: 62%;
+    /* Уменьшаем ширину поля ввода */
+    display: inline-block;
+    margin-left: 17px;
+    /* Делаем его строчно-блочным элементом */
+    border-radius: 5px;
+}
+
+.js-button-search {
+    display: inline-block;
+    /* Делаем кнопку поиска строчно-блочным элементом */
+    height: 34px;
+    width: 50px;
+    padding: 10px;
+    margin-left: 15px;
+    border-radius: 5px;
+
 }
