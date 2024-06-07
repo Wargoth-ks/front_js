@@ -2,12 +2,15 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-image: url('./images/logo.jpg');
+    background-attachment: fixed;
+    background-size: 100% 100%;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 15px;
+    /* padding: 0 30px; */
     position: relative;
     overflow-x: hidden;
 }
@@ -138,6 +141,57 @@ footer {
     background-color: #111;
     transition: 0.5s;
     transform: translateX(-100%);
+    z-index: 1001;
+}
+
+
+
+.menu-list {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50%;
+    flex-direction: column;
+    color: white;
+    font-size: large;
+    text-decoration: none;
+}
+
+.menu-btn {
+    width: 50px;
+    height: 30px;
+    background-color: #333;
+    color: white;
+    position: absolute;
+    right: -80px;
+    top: 10px;
+    font-size: 20px;
+    text-decoration: none;
+    margin-right: -10px;
+    z-index: 1002;
+}
+
+.menu-btn:hover {
+    color: red;
+}
+
+/* .form-menu {
+    width: 150px;
+    
+}
+
+.menu-search-button {
+    width: 150px;
+    margin-top: 10px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+} */
+
+
+.menu-active {
+    transform: translateX(0%);
 }
 
 .js-list ul {
@@ -147,7 +201,7 @@ footer {
     overflow: hidden;
     background-color: #333;
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     transition: transform 0.5s;
 }
@@ -174,41 +228,9 @@ footer {
     background-color: #111;
 }
 
-.menu-list {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 50%;
-    flex-direction: column;
-    color: white;
-    font-size: large;
-    text-decoration: none;
-}
-
-.menu-btn {
-    width: 50px;
-    height: 30px;
-    background-color: #333;
-    color: white;
-    position: absolute;
-    right: -80px;
-    top: 10px;
-    font-size: 20px;
-    text-decoration: none;
-    margin-right: -10px;
-}
-
-.menu-btn:hover {
-    color: red;
-}
-
-.menu-active {
-    transform: translateX(0%);
-}
-
-.js-list-move {
+/* .js-list-move {
     transform: translateX(30%);
-}
+} */
 
 .checkbox-container {
     display: flex;
@@ -233,14 +255,10 @@ footer {
 .login-form {
     margin: auto;
     margin-top: 8%;
-    /* Добавьте нужный вам отступ сверху */
     width: 80%;
-    /* Или любую другую ширину по вашему выбору */
     max-width: 500px;
-    /* Максимальная ширина модального окна */
 }
 
 #loginPassword {
     margin-bottom: 30px;
 }
-

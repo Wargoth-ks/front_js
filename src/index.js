@@ -3,17 +3,17 @@ import { getStatusServer, postLoginUser } from './partials/requests';
 // getStatusServer();
 
 //// Menu after login
-// const menuBtn = document.querySelector('.menu-btn')
-// const menuToggle = document.querySelector('.menu')
-// const jsList = document.querySelector('.js-list')
+const menuBtn = document.querySelector('.menu-btn')
+const menuToggle = document.querySelector('.menu')
+const jsList = document.querySelector('.js-list')
 
-// function menuClick(e) {
-//     e.preventDefault()
-//     menuToggle.classList.toggle('menu-active');
-//     jsList.classList.toggle('js-list-move');
-// }
+function menuClick(e) {
+    e.preventDefault()
+    menuToggle.classList.toggle('menu-active');
+    jsList.classList.toggle('js-list-move');
+}
 
-// menuBtn.addEventListener('click', menuClick)
+menuBtn.addEventListener('click', menuClick)
 
 import { markupModalLogin, markupModalReg } from './partials/markup';
 
