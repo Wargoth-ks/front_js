@@ -8,7 +8,7 @@
                     <input type="password" id="loginPassword" name="password" required>
                     <button type="submit">Login</button>
                 </form>
-            </div>`,rb=`<div class="modal-content">
+            </div>`,rb=`<div class="modal-content reg-form">
                 <span class="close" id="registerClose">&times;</span>
                 <h2 class="modal-title">Register</h2>
                 <form class="form">
@@ -26,4 +26,4 @@
                     <button type="submit">Register</button>
                 </form>
             </div>`,rw=document.querySelector(".menu-btn"),rR=document.querySelector(".menu");rw.addEventListener("click",function(e){rR.classList.toggle("menu-active")});let rA=document.querySelectorAll(".js-btns"),rT=document.querySelectorAll(".modal");function rO(e){e.style.display="none",e.innerHTML=""}rA.forEach((e,t)=>{let r=rT[t];e.addEventListener("click",()=>{switch(r.style.display="block",t){case 0:r.insertAdjacentHTML("afterbegin",rE);break;case 1:r.insertAdjacentHTML("afterbegin",rb),function(){let e=document.querySelector("#inputImg");document.querySelector("#idCheckBox").addEventListener("click",function(){e.disabled=!this.checked})}();break;default:console.dir(t)}(function(e){e.querySelector(".close").addEventListener("click",()=>{rO(e)})})(r),document.addEventListener("keydown",e=>{"Escape"===e.code&&rO(r)})})}),document.querySelector("#loginBtn").addEventListener("click",()=>{console.dir("Open login form");let e=document.querySelector(".form"),t=e.lastElementChild,r=e.parentNode.parentElement;e.addEventListener("submit",async e=>{e.preventDefault();let{target:{email:n,password:o}}=e;rm({username:n.value,password:o.value}),t.setAttribute("disabled",""),n.disabled=!0,o.disabled=!0,setTimeout(rO,3e3,r)})})}();
-//# sourceMappingURL=index.58704f7f.js.map
+//# sourceMappingURL=index.64c8be35.js.map
