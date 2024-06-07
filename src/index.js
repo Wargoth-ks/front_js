@@ -5,12 +5,14 @@ import { getStatusServer, postLoginUser } from './partials/requests';
 //// Menu after login
 const menuBtn = document.querySelector('.menu-btn')
 const menuToggle = document.querySelector('.menu')
-const jsList = document.querySelector('.js-list')
+// const jsList = document.querySelector('.js-list')
+
 
 function menuClick(e) {
-    e.preventDefault()
+    // e.preventDefault()
     menuToggle.classList.toggle('menu-active');
-    jsList.classList.toggle('js-list-move');
+    // jsList.classList.toggle('js-list-move');
+    // onCloseEscModal(menuToggle);
 }
 
 menuBtn.addEventListener('click', menuClick)
@@ -66,13 +68,14 @@ function onCloseEscModal(modal) {
         // console.dir(e);
         if (e.code === 'Escape') {
             closeModalHandler(modal);
-        }
+        }   
     });
 }
 
 function closeModalHandler(modal) {
     modal.style.display = 'none';
     modal.innerHTML = '';
+    // menuToggle.style.display = 'flex'
 }
 
 function loginData() {
@@ -108,3 +111,5 @@ function loginData() {
 }
 
 loginData();
+
+
