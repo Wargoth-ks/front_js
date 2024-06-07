@@ -21,6 +21,7 @@ header {
     top: 0;
     background-color: #333;
     z-index: 1000;
+    box-shadow: rgba(245, 238, 238, 0.35) 0px -50px 36px -28px inset;
 }
 
 main {
@@ -72,6 +73,7 @@ main {
     text-align: center;
     width: 100%;
     margin-top: -40px;
+    font-size: 25px;
 }
 
 .form {
@@ -126,6 +128,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: rgba(223, 213, 213, 0.35) 0px -50px 36px -28px inset;
 }
 
 .menu {
@@ -142,7 +145,10 @@ footer {
     transition: 0.5s;
     transform: translateX(-100%);
     z-index: 1001;
+    box-shadow: rgba(211, 202, 202, 0.45) 1px 1px 40px 0px inset;
 }
+
+
 
 .menu-list {
     display: flex;
@@ -157,8 +163,8 @@ footer {
 
 .menu-btn {
     width: 50px;
-    height: 30px;
-    background-color: #333;
+    height: 0px;
+    background-color: rgb(41, 38, 38);
     color: white;
     position: absolute;
     right: -80px;
@@ -167,6 +173,7 @@ footer {
     text-decoration: none;
     margin-right: -10px;
     z-index: 1002;
+    box-shadow: rgba(245, 238, 238, 0.35) 0px -50px 36px -28px inset;
 }
 
 .menu-btn:hover {
@@ -202,6 +209,7 @@ footer {
     justify-content: right;
     align-items: center;
     transition: transform 0.5s;
+    box-shadow: rgba(245, 238, 238, 0.35) 0px -50px 36px -28px inset;
 }
 
 .js-list ul li {
@@ -251,7 +259,7 @@ footer {
 
 
 .login-form {
-    margin: auto;
+    /* margin: auto; */
     margin-top: 8%;
     width: 80%;
     max-width: 500px;
@@ -290,6 +298,7 @@ footer {
     border-radius: 100px;
     background-color: black;
     color: white;
+    box-shadow: rgba(105, 95, 95, 0.35) 0px -50px 36px -28px inset;
 }
 
 .js-button-search:hover {

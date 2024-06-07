@@ -10,7 +10,7 @@ const markupModalLogin = `<div class="modal-content login-form">
                 </form>
             </div>`;
 
-const markupModalReg = `<div class="modal-content">
+const markupModalReg = `<div class="modal-content reg-form">
                 <span class="close" id="registerClose">&times;</span>
                 <h2 class="modal-title">Register</h2>
                 <form class="form">
