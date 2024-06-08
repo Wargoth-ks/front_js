@@ -12,7 +12,6 @@ function menuClick(e) {
     e.preventDefault()
     menuToggle.classList.toggle('menu-active');
     // jsList.classList.toggle('js-list-move');
-    // onCloseEscModal(menuToggle);
 }
 
 menuBtn.addEventListener('click', menuClick);
@@ -35,6 +34,8 @@ function onCloseEscMenu() {
 }
 
 onCloseEscMenu();
+
+
 
 const btns = document.querySelectorAll('.js-btns');
 const modals = document.querySelectorAll('.modal');

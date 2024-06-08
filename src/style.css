@@ -3,8 +3,13 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('./images/logo.jpg');
-    background-attachment: fixed;
-    background-size: 100% 100%;
+    /* background-attachment: fixed; */
+    background-size: 100%;
+    height: 500vh;
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
 
 .container {
@@ -39,7 +44,7 @@ main {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    padding-top: 1px;
+    padding-top: 30px;
 }
 
 .modal-title {
@@ -273,7 +278,7 @@ footer {
 }
 
 .reg-form {
-    width: 25%;
+    width: 80%;
     font-size: 13px;
     color: white;
     background-color: #111;
@@ -285,8 +290,10 @@ footer {
     height: 45px;
 }
 
-#registerEmail, #registerPassword, #confirmPassword {
-    height: 35px;
+#registerEmail,
+#registerPassword,
+#confirmPassword {
+    height: 30px;
 }
 
 
@@ -297,30 +304,34 @@ footer {
 
 @media screen and (max-width: 600px) {
     .menu {
-        width: 100%;
+        width: 50%;
         /* Увеличиваем ширину меню до 100% */
     }
 }
 
 #form-search-input {
-    width: 62%;
+    width: 75%;
     /* Уменьшаем ширину поля ввода */
     display: inline-block;
-    margin-left: 20px;
+    top: 0;
+    /* left: 0; */
+    margin-left: 35px;
     /* Делаем его строчно-блочным элементом */
     border-radius: 50px;
-    height: 50px;
+    height: 45px;
     text-align: center;
 }
 
 .js-button-search {
     display: inline-block;
     /* Делаем кнопку поиска строчно-блочным элементом */
-    height: 55px;
-    width: 55px;
-    padding: 0px;
-    margin-left: 10px;
-    border-radius: 100px;
+    /* height: 55px; */
+    width: 75%;
+    height: 40px;
+    /* padding: 0px; */
+    margin-top: 15px;
+    margin-left: 35px;
+    border-radius: 15px;
     background-color: black;
     color: white;
     box-shadow: rgba(105, 95, 95, 0.35) 0px -50px 36px -28px inset;
