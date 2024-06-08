@@ -1,46 +1,46 @@
 // import bootstrap from 'bootstrap'
-import { getStatusServer, postLoginUser } from './partials/requests';
+import { getStatusServer, postLoginUser, getUsers } from './partials/requests';
 import { markupModalLogin, markupModalReg } from './partials/markup';
-// getStatusServer();
+getStatusServer();
 
 //// Menu after login
 const menuBtn = document.querySelector('.menu-btn');
 const menuToggle = document.querySelector('.menu');
 const div = document.querySelector('div.menu');
+
+const btns = document.querySelectorAll('.js-btns');
+const modals = document.querySelectorAll('.modal');
 // const jsList = document.querySelector('.js-list')
 
-function TestMenu() {
+function menuShowHide() {
     menuToggle.classList.toggle('menu-active');
     menuBtn.style.opacity = 1;
-    
+
     if (div.classList.contains('menu-active')) {
         menuBtn.style.opacity = 0;
     }
 }
 
-function onMenuToggle() {
+function mainMenu() {
     menuBtn.addEventListener('click', eClick => {
         eClick.preventDefault();
-        TestMenu();
+        menuShowHide();
     });
-    div.addEventListener('keydown', eventEsc => {
+    div.addEventListener('keydown', evEsc => {
         // console.dir(e);
-        eventEsc.preventDefault();
-        if (eventEsc.code === 'Escape') {
-            eventEsc.currentTarget.classList.remove('menu-active');
+        evEsc.preventDefault();
+        if (evEsc.code === 'Escape') {
+            evEsc.currentTarget.classList.remove('menu-active');
         }
     });
-    div.addEventListener('mouseleave', eMouseOut => {
-        eMouseOut.preventDefault();
+    div.addEventListener('mouseleave', eMouse => {
+        eMouse.preventDefault();
         // console.dir(!e.currentTarget.classList.contains('menu-active'));
-        TestMenu();
+        menuShowHide();
     });
 }
 
-onMenuToggle();
-
-const btns = document.querySelectorAll('.js-btns');
-const modals = document.querySelectorAll('.modal');
+mainMenu();
 
 btns.forEach((btn, index) => {
     let modal = modals[index];
@@ -128,3 +128,15 @@ function loginData() {
 }
 
 loginData();
+
+
+const jsbtn = document.querySelector('.js-button-search')
+
+function searchUsers() {
+    jsbtn.addEventListener('click', () => {
+        console.dir('Search users');
+        getUsers()
+    })
+}
+
+searchUsers()

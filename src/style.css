@@ -147,7 +147,7 @@ footer {
     align-items: center;
     justify-content: center;
     background-color: #111;
-    transition: 0.5s;
+    transition: 0.7s;
     transform: translateX(-100%);
     z-index: 1001;
     box-shadow: rgba(211, 202, 202, 0.45) 1px 1px 40px 0px inset;
