@@ -10,7 +10,7 @@ let e,t,r,n;var o,i,s,a,u,l="undefined"!=typeof globalThis?globalThis:"undefined
                 </form>
             </div>`,rb=`<div class="modal-content reg-form">
                 <span class="close" id="registerClose">&times;</span>
-                <h2 class="modal-title">Register</h2>
+                <h2 class="modal-title">Signup</h2>
                 <form class="form">
                     <label for="registerEmail">Email:</label>
                     <input type="email" id="registerEmail" name="email" required>
@@ -23,7 +23,7 @@ let e,t,r,n;var o,i,s,a,u,l="undefined"!=typeof globalThis?globalThis:"undefined
                         <input type="checkbox" id="idCheckBox">
                     </div>
                     <input disabled type="file" name="avatar" id="inputImg" accept="image/png">
-                    <button type="submit">Register</button>
+                    <button class="reg-btn" type="submit">Signup</button>
                 </form>
             </div>`,rw=document.querySelector(".menu-btn"),rR=document.querySelector(".menu");rw.addEventListener("click",function(e){rR.classList.toggle("menu-active")});const rA=document.querySelectorAll(".js-btns"),rT=document.querySelectorAll(".modal");function rO(e){e.style.display="none",e.innerHTML=""}rA.forEach((e,t)=>{let r=rT[t];e.addEventListener("click",()=>{switch(r.style.display="block",t){case 0:r.insertAdjacentHTML("afterbegin",rE);break;case 1:r.insertAdjacentHTML("afterbegin",rb),function(){let e=document.querySelector("#inputImg");document.querySelector("#idCheckBox").addEventListener("click",function(){e.disabled=!this.checked})}();break;default:console.dir(t)}(function(e){e.querySelector(".close").addEventListener("click",()=>{rO(e)})})(r),document.addEventListener("keydown",e=>{"Escape"===e.code&&rO(r)})})}),document.querySelector("#loginBtn").addEventListener("click",()=>{console.dir("Open login form");let e=document.querySelector(".form"),t=e.lastElementChild,r=e.parentNode.parentElement;e.addEventListener("submit",async e=>{e.preventDefault();let{target:{email:n,password:o}}=e;rm({username:n.value,password:o.value}),t.setAttribute("disabled",""),n.disabled=!0,o.disabled=!0,setTimeout(rO,3e3,r)})});
-//# sourceMappingURL=index.5d845e0a.js.map
+//# sourceMappingURL=index.0028dd55.js.map
