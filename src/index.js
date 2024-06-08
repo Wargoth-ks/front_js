@@ -1,7 +1,7 @@
 // import bootstrap from 'bootstrap'
 import { getStatusServer, postLoginUser, getUsers } from './partials/requests';
 import { markupModalLogin, markupModalReg } from './partials/markup';
-getStatusServer();
+// getStatusServer();
 
 //// Menu after login
 const menuBtn = document.querySelector('.menu-btn');
