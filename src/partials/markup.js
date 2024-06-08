@@ -12,7 +12,7 @@ const markupModalLogin = `<div class="modal-content login-form">
 
 const markupModalReg = `<div class="modal-content reg-form">
                 <span class="close" id="registerClose">&times;</span>
-                <h2 class="modal-title">Register</h2>
+                <h2 class="modal-title">Signup</h2>
                 <form class="form">
                     <label for="registerEmail">Email:</label>
                     <input type="email" id="registerEmail" name="email" required>
@@ -25,7 +25,7 @@ const markupModalReg = `<div class="modal-content reg-form">
                         <input type="checkbox" id="idCheckBox">
                     </div>
                     <input disabled type="file" name="avatar" id="inputImg" accept="image/png">
-                    <button type="submit">Register</button>
+                    <button class="reg-btn" type="submit">Signup</button>
                 </form>
             </div>`;
 
