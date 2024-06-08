@@ -6,36 +6,38 @@ import { markupModalLogin, markupModalReg } from './partials/markup';
 //// Menu after login
 const menuBtn = document.querySelector('.menu-btn');
 const menuToggle = document.querySelector('.menu');
+const div = document.querySelector('div.menu');
 // const jsList = document.querySelector('.js-list')
 
-function menuClick(e) {
-    e.preventDefault()
+function TestMenu() {
     menuToggle.classList.toggle('menu-active');
-    // jsList.classList.toggle('js-list-move');
+    menuBtn.style.opacity = 1;
+    
+    if (div.classList.contains('menu-active')) {
+        menuBtn.style.opacity = 0;
+    }
 }
 
-menuBtn.addEventListener('click', menuClick);
-
-function onCloseEscMenu() {
-    menuToggle.addEventListener('keydown', e => {
+function onMenuToggle() {
+    menuBtn.addEventListener('click', eClick => {
+        eClick.preventDefault();
+        TestMenu();
+    });
+    div.addEventListener('keydown', eventEsc => {
         // console.dir(e);
-        e.preventDefault()
-        if (e.code === 'Escape') {
-            e.currentTarget.classList.remove('menu-active');
+        eventEsc.preventDefault();
+        if (eventEsc.code === 'Escape') {
+            eventEsc.currentTarget.classList.remove('menu-active');
         }
     });
-    const div = document.querySelector('div.menu')
-    console.dir(div);
-    div.addEventListener('mouseleave', (e) => {
-        // e.preventDefault()
+    div.addEventListener('mouseleave', eMouseOut => {
+        eMouseOut.preventDefault();
         // console.dir(!e.currentTarget.classList.contains('menu-active'));
-        menuToggle.classList.toggle('menu-active');
-    })
+        TestMenu();
+    });
 }
 
-onCloseEscMenu();
-
-
+onMenuToggle();
 
 const btns = document.querySelectorAll('.js-btns');
 const modals = document.querySelectorAll('.modal');
