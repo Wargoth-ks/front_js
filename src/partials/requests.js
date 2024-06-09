@@ -11,7 +11,7 @@ const axiosInstanse = axios.create({
     baseURL: BASE_URL,
     headers: {
         'Content-Type': 'application/json',
-        // Accept: 'application/json',
+        Accept: 'application/json',
         // withCredentials: true,
     },
 });
@@ -22,17 +22,17 @@ const axiosInstanse = axios.create({
 // });
 
 axiosInstanse.interceptors.request.use(
-    config => {
-        const access_token = localStorage.getItem('access_token');
-        if (access_token) {
-            config.headers['Authorization'] = `Bearer ${access_token}`;
+    request => {
+        const old_access_token = localStorage.getItem('access_token');
+        if (old_access_token) {
+            request.headers['Authorization'] = `Bearer ${old_access_token}`;
             console.dir('Succefull request');
         }
-        return config;
+        return request;
     },
     error => {
         // Do something with request error
-        console.dir(`Request error: ${error}`);
+        // console.dir(`Request error: ${error}`);
         return Promise.reject(error);
     }
 );
@@ -42,35 +42,41 @@ axiosInstanse.interceptors.response.use(
     async error => {
         const originalRequest = error.config;
         if (
-            (error.response &&
-            error.response.status == 401) &&
+            error.response &&
+            error.response.status == 401 &&
             !originalRequest._retry
         ) {
             originalRequest._retry = true;
             try {
-                console.log(error.response.status)
-                const refresh_token = localStorage.getItem('refresh_token');
-                console.dir(`For new access_token: ${refresh_token}`);
+                console.dir(error.response.status);
+                const old_refresh_token = localStorage.getItem('refresh_token');
+                console.dir(`For new access_token: ${old_refresh_token}`);
                 const response = await axiosInstanse.get(
                     '/auth/refresh_token',
                     {
                         headers: {
-                            Authorization: `Bearer ${refresh_token}`,
-                            // Accept: 'application/json',
+                            Authorization: `Bearer ${old_refresh_token}`,
+                            Accept: 'application/json',
                         },
-                        withCredentials: true,
+                        // withCredentials: true,
                     }
                 );
-                const { access_token, refresh_token: new_refresh_token } =
-                    response.data;
-                console.dir(response.data);
+
+                const { access_token, refresh_token } = response.data;
+                console.dir(access_token, refresh_token);
+
                 localStorage.setItem('access_token', access_token);
-                localStorage.setItem('refresh_token', new_refresh_token);
+                localStorage.setItem('refresh_token', refresh_token);
                 console.dir('Update pair token');
-                axiosInstanse.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+
+                axiosInstanse.defaults.headers.common[
+                    'Authorization'
+                ] = `Bearer ${access_token}`;
                 return axiosInstanse(originalRequest);
+
             } catch (refreshError) {
                 console.error('Token refresh failed:', refreshError);
+
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
                 // window.location.href = '/auth/login';
@@ -112,7 +118,7 @@ async function postLoginUser(data) {
 async function getUsers() {
     const access_token = localStorage.getItem('access_token');
     // const refresh_token = localStorage.getItem('refresh_token');
-    console.dir(access_token);
+    // console.dir(access_token);
     await axiosInstanse
         .get('/contacts/search', {
             headers: {
