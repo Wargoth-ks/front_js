@@ -129,14 +129,13 @@ function loginData() {
 
 loginData();
 
+const jsbtn = document.querySelector('.js-button-search');
 
-const jsbtn = document.querySelector('.js-button-search')
-
-function searchUsers() {
+async function searchUsers() {
     jsbtn.addEventListener('click', () => {
         console.dir('Search users');
-        getUsers()
-    })
+        getUsers();
+    });
 }
 
-searchUsers()
+searchUsers();

@@ -11,26 +11,26 @@ const axiosInstanse = axios.create({
     baseURL: BASE_URL,
     headers: {
         'Content-Type': 'application/json',
-        Accept: 'application/json',
+        // Accept: 'application/json',
+        // withCredentials: true,
     },
 });
 
-axiosRetry(axiosInstanse, {
-    retries: 5,
-    retryCondition: () => true,
-});
+// axiosRetry(axiosInstanse, {
+//     retries: 3,
+//     retryCondition: () => true,
+// });
 
 axiosInstanse.interceptors.request.use(
-    function (response) {
-        // Do something before request is sent
+    config => {
         const access_token = localStorage.getItem('access_token');
         if (access_token) {
-            response.headers.Authorization = `Bearer ${access_token}`;
+            config.headers['Authorization'] = `Bearer ${access_token}`;
+            console.dir('Succefull request');
         }
-        console.dir('Succefull request');
-        return response;
+        return config;
     },
-    function (error) {
+    error => {
         // Do something with request error
         console.dir(`Request error: ${error}`);
         return Promise.reject(error);
@@ -38,50 +38,52 @@ axiosInstanse.interceptors.request.use(
 );
 
 axiosInstanse.interceptors.response.use(
-    function (response) {
-        // Здесь можете сделать что-нибудь с ответом
-        console.dir('Succefull response');
-        return response;
-    },
-    function (error) {
-        // Здесь можете сделать что-то с ошибкой ответа
-        const origRequest = error.response;
+    response => response,
+    async error => {
+        const originalRequest = error.config;
         if (
-            error.response.status == 401 &&
-            localStorage.getItem('refresh_token')
+            (error.response &&
+            error.response.status == 401) &&
+            !originalRequest._retry
         ) {
-            const refresh_token = localStorage.getItem('refresh_token');
-            let data = JSON.stringify({
-                refresh_token: refresh_token,
-            })
-                .post('/auth/refresh_token', data)
-                .then(response => {
-                    localStorage.setItem('access_token', response.access_token);
-                    localStorage.setItem(
-                        'refresh_token',
-                        response.refresh_token
-                    );
-                    origRequest.headers.Authorization = `Bearer ${response.access_token}`;
-                    axiosInstanse(origRequest)
-                        .then(response => {
-                            return response.data;
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+            originalRequest._retry = true;
+            try {
+                console.log(error.response.status)
+                const refresh_token = localStorage.getItem('refresh_token');
+                console.dir(`For new access_token: ${refresh_token}`);
+                const response = await axiosInstanse.get(
+                    '/auth/refresh_token',
+                    {
+                        headers: {
+                            Authorization: `Bearer ${refresh_token}`,
+                            // Accept: 'application/json',
+                        },
+                        withCredentials: true,
+                    }
+                );
+                const { access_token, refresh_token: new_refresh_token } =
+                    response.data;
+                console.dir(response.data);
+                localStorage.setItem('access_token', access_token);
+                localStorage.setItem('refresh_token', new_refresh_token);
+                console.dir('Update pair token');
+                axiosInstanse.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+                return axiosInstanse(originalRequest);
+            } catch (refreshError) {
+                console.error('Token refresh failed:', refreshError);
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
+                // window.location.href = '/auth/login';
+                return Promise.reject(refreshError);
+            }
         }
-        console.dir(`Response error: ${error}`);
         return Promise.reject(error);
     }
 );
 
 async function getStatusServer() {
     try {
-        const response = await axios.get(BASE_URL + '/healthchecker');
+        const response = await axiosInstanse.get(BASE_URL + '/healthchecker');
         console.log(response);
         return response;
     } catch (error) {
@@ -114,7 +116,7 @@ async function getUsers() {
     await axiosInstanse
         .get('/contacts/search', {
             headers: {
-                // Authorization: `Bearer ${access_token}`,
+                Authorization: `Bearer ${access_token}`,
                 accept: 'application/json',
             },
         })
@@ -126,6 +128,6 @@ async function getUsers() {
         });
 }
 
-// getUsers()
+// getUsers();
 
 export { getStatusServer, postLoginUser, getUsers };
