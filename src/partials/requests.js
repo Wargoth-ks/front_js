@@ -12,7 +12,6 @@ const axiosInstanse = axios.create({
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        // withCredentials: true,
     },
 });
 
@@ -38,42 +37,24 @@ axiosInstanse.interceptors.request.use(
 );
 
 axiosInstanse.interceptors.response.use(
-    response => response,
+    response => {
+        return response;
+    },
     async error => {
         const originalRequest = error.config;
         if (
-            error.response &&
-            error.response.status == 401 &&
-            !originalRequest._retry
+            (error.response &&
+            error.response.status == 401) &&
+            localStorage.getItem('refresh_token')
         ) {
-            originalRequest._retry = true;
             try {
                 console.dir(error.response.status);
                 const old_refresh_token = localStorage.getItem('refresh_token');
-                console.dir(`For new access_token: ${old_refresh_token}`);
-                const response = await axiosInstanse.get(
-                    '/auth/refresh_token',
-                    {
-                        headers: {
-                            Authorization: `Bearer ${old_refresh_token}`,
-                            Accept: 'application/json',
-                        },
-                        // withCredentials: true,
-                    }
-                );
-
-                const { access_token, refresh_token } = response.data;
-                console.dir(access_token, refresh_token);
-
-                localStorage.setItem('access_token', access_token);
-                localStorage.setItem('refresh_token', refresh_token);
-                console.dir('Update pair token');
-
+                updateAccessRefreshToken(old_refresh_token)
                 axiosInstanse.defaults.headers.common[
                     'Authorization'
                 ] = `Bearer ${access_token}`;
                 return axiosInstanse(originalRequest);
-
             } catch (refreshError) {
                 console.error('Token refresh failed:', refreshError);
 
@@ -117,8 +98,6 @@ async function postLoginUser(data) {
 
 async function getUsers() {
     const access_token = localStorage.getItem('access_token');
-    // const refresh_token = localStorage.getItem('refresh_token');
-    // console.dir(access_token);
     await axiosInstanse
         .get('/contacts/search', {
             headers: {
@@ -135,5 +114,25 @@ async function getUsers() {
 }
 
 // getUsers();
+
+async function updateAccessRefreshToken(refresh_token) {
+    await axiosInstanse
+        .get('/auth/refresh_token', {
+            headers: {
+                Authorization: `Bearer ${refresh_token}`,
+            },
+        })
+        .then(response => {
+            console.dir(response);
+            const { access_token, refresh_token } = response.data;
+            localStorage.setItem('access_token', access_token);
+            localStorage.setItem('refresh_token', refresh_token);
+        })
+        .catch(error => {
+            console.dir(error);
+        });
+}
+
+// updateAccessRefreshToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZXdldDc2MzI3QG1meWF4LmNvbSIsImlhdCI6MTcxNzk0Nzk3OSwiZXhwIjoxNzE4NTUyNzc5LCJzY29wZSI6InJlZnJlc2hfdG9rZW4ifQ.CHIhHRDBCRa0sGJY41s0G_Z0j2BT_GXdowUUrYN27vk')
 
 export { getStatusServer, postLoginUser, getUsers };
