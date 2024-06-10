@@ -1,32 +1,46 @@
 import axios from 'axios';
-import axiosRetry from 'axios-retry';
 
-// import qs from 'qs';
 
 let BASE_URL = 'https://addressbook-wargcorp-8f592fab.koyeb.app/api';
-// axios.defaults.baseURL = BASE_URL;
-// axios.defaults.headers.get['Content-Type'] = 'application/json';
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-    }, 
+    },
+
 });
 
-axiosRetry(axiosInstance, {
-    retries: 3,
-    retryCondition: () => true,
-    // retryDelay: retryCount => retryCount * 1000,
-});
+
+class Storage {
+    static getItem(token_type) {
+        if (!token_type) {
+            return;
+        }
+        return localStorage.getItem(token_type);
+    }
+    static setItem(token_type, token_value) {
+        if (!token_value) {
+            return;
+        }
+        return localStorage.setItem(token_type, token_value);
+    }
+    static removeItem(token_type) {
+        if (!token_type) {
+            return;
+        }
+        return localStorage.removeItem(token_type);
+    }
+}
 
 axiosInstance.interceptors.request.use(
     request => {
-        const old_access_token = localStorage.getItem('access_token');
+        // const old_access_token = localStorage.getItem('access_token');
+        const old_access_token = Storage.getItem('access_token');
         if (old_access_token) {
             request.headers['Authorization'] = `Bearer ${old_access_token}`;
-            console.dir('Succefull request');
+            console.dir('Request: success!!!');
         }
         return request;
     },
@@ -39,30 +53,29 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     response => {
+        console.log('Response: Success!!!');
         return response;
     },
     async error => {
-        const originalRequest = error.config;
-        if (
-            error.response &&
-            error.response.status == 401 &&
-            !originalRequest._retry
-        ) {
-            originalRequest._retry = true;
-            console.dir(error.response.status);
+        if (error.response && error.response.status == 401) {
+            const originalRequest = error.config;
+            if (originalRequest._retry) {
+                originalRequest._retry = true;
+                console.dir(error.response.status);
+            }
             try {
-                const old_refresh_token = localStorage.getItem('refresh_token');
+                // const old_refresh_token = localStorage.getItem('refresh_token');
+                const old_refresh_token = Storage.getItem('refresh_token');
                 const new_tokens = await updateTokens(old_refresh_token);
-                console.dir(`New tokens: ${new_tokens}`);
                 const { access_token } = new_tokens;
                 originalRequest.headers[
                     'Authorization'
                 ] = `Bearer ${access_token}`;
-                return axiosInstance(originalRequest);
+                return await axios(originalRequest);
             } catch (refreshError) {
                 console.error('Token refresh failed:', refreshError);
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
+                Storage.removeItem('accessToken');
+                Storage.removeItem('refreshToken');
                 return Promise.reject(refreshError);
             }
         }
@@ -89,8 +102,8 @@ async function postLoginUser(data) {
         });
         console.dir(response);
         const { access_token, refresh_token } = response.data;
-        localStorage.setItem('access_token', access_token);
-        localStorage.setItem('refresh_token', refresh_token);
+        Storage.setItem('access_token', access_token);
+        Storage.setItem('refresh_token', refresh_token);
     } catch (error) {
         console.log('Login error:', error);
     }
@@ -101,8 +114,9 @@ async function getUsers() {
         const response = await axiosInstance.get('/contacts/search', {
             headers: {
                 Accept: 'application/json',
-                // Authorization: `Bearer `
+                Authorization: `Bearer ${Storage.getItem('access_token')}`,
             },
+            timeout: 2000,
         });
         console.dir(response.data);
     } catch (error) {
@@ -114,16 +128,15 @@ async function getUsers() {
 
 async function updateTokens(old_refresh_token) {
     try {
-        const response = await axios.get(
-            `${BASE_URL}/auth/refresh_token`, {
+        const response = await axios.get(`${BASE_URL}/auth/refresh_token`, {
             headers: {
                 Authorization: `Bearer ${old_refresh_token}`,
             },
         });
-        console.dir(response);
+        console.dir('New pair of tokens', response.data);
         const { access_token, refresh_token } = response.data;
-        localStorage.setItem('access_token', access_token);
-        localStorage.setItem('refresh_token', refresh_token);
+        Storage.setItem('access_token', access_token);
+        Storage.setItem('refresh_token', refresh_token);
         return { access_token, refresh_token };
     } catch (error) {
         console.dir(error);
@@ -131,6 +144,5 @@ async function updateTokens(old_refresh_token) {
     }
 }
 
-// updateAccessRefreshToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZXdldDc2MzI3QG1meWF4LmNvbSIsImlhdCI6MTcxNzk0Nzk3OSwiZXhwIjoxNzE4NTUyNzc5LCJzY29wZSI6InJlZnJlc2hfdG9rZW4ifQ.CHIhHRDBCRa0sGJY41s0G_Z0j2BT_GXdowUUrYN27vk')
 
 export { getStatusServer, postLoginUser, getUsers };

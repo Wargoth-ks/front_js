@@ -28,7 +28,7 @@ function mainMenu() {
     });
     div.addEventListener('keydown', evEsc => {
         // console.dir(e);
-        evEsc.preventDefault();
+        // evEsc.preventDefault();
         if (evEsc.code === 'Escape') {
             evEsc.currentTarget.classList.remove('menu-active');
         }
@@ -77,7 +77,8 @@ function onCheckBox() {
 function onCloseClickModal(modal) {
     const closeModal = modal.querySelector('.close');
 
-    closeModal.addEventListener('click', () => {
+    closeModal.addEventListener('click', (e) => {
+        e.preventDefault()
         closeModalHandler(modal);
     });
 }
@@ -85,6 +86,7 @@ function onCloseClickModal(modal) {
 function onCloseEscModal(modal) {
     document.addEventListener('keydown', e => {
         // console.dir(e);
+        e.preventDefault()
         if (e.code === 'Escape') {
             closeModalHandler(modal);
         }
@@ -132,12 +134,12 @@ loginData();
 
 const jsbtn = document.querySelector('.js-button-search');
 
-function searchUsers() {
+async function searchUsers() {
     
-    jsbtn.addEventListener('click', (e) => {
+    jsbtn.addEventListener('click', async (e) => {
         e.preventDefault()
         console.dir('Search users');
-        getUsers();
+        await getUsers();
     });
 }
 
