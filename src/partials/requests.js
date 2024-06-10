@@ -1,7 +1,7 @@
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 
-
-let BASE_URL = 'https://addressbook-wargcorp-8f592fab.koyeb.app/api';
+let BASE_URL = process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -9,28 +9,26 @@ const axiosInstance = axios.create({
         'Content-Type': 'application/json',
         Accept: 'application/json',
     },
-
+    withCredentials: true,
 });
 
+// axiosRetry(axiosInstance, {
+//     retries: 5,
+//     retryCondition: () => true,
+//     retryDelay: axiosRetry.exponentialDelay,
+// });
 
 class Storage {
-    static getItem(token_type) {
-        if (!token_type) {
-            return;
-        }
-        return localStorage.getItem(token_type);
+    static getItem(key) {
+        return !!~key ? localStorage.getItem(key) : null;
     }
-    static setItem(token_type, token_value) {
-        if (!token_value) {
-            return;
-        }
-        return localStorage.setItem(token_type, token_value);
+
+    static setItem(key, value) {
+        !!~(key && value) ? localStorage.setItem(key, value) : undefined;
     }
-    static removeItem(token_type) {
-        if (!token_type) {
-            return;
-        }
-        return localStorage.removeItem(token_type);
+
+    static removeItem(key) {
+        !!~key ? localStorage.removeItem(key) : undefined;
     }
 }
 
@@ -71,7 +69,7 @@ axiosInstance.interceptors.response.use(
                 originalRequest.headers[
                     'Authorization'
                 ] = `Bearer ${access_token}`;
-                return await axios(originalRequest);
+                return axiosInstance(originalRequest);
             } catch (refreshError) {
                 console.error('Token refresh failed:', refreshError);
                 Storage.removeItem('accessToken');
@@ -82,6 +80,24 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+async function updateTokens(old_refresh_token) {
+    try {
+        const response = await axios.get(`${BASE_URL}/auth/refresh_token`, {
+            headers: {
+                Authorization: `Bearer ${old_refresh_token}`,
+            },
+        });
+        console.dir('New pair of tokens', response.data);
+        const { access_token, refresh_token } = response.data;
+        Storage.setItem('access_token', access_token);
+        Storage.setItem('refresh_token', refresh_token);
+        return { access_token, refresh_token };
+    } catch (error) {
+        console.dir(error);
+        return Promise.reject(error);
+    }
+}
 
 async function getStatusServer() {
     try {
@@ -114,13 +130,14 @@ async function getUsers() {
         const response = await axiosInstance.get('/contacts/search', {
             headers: {
                 Accept: 'application/json',
-                Authorization: `Bearer ${Storage.getItem('access_token')}`,
+                // Authorization: `Bearer ${Storage.getItem('access_token')}`,
             },
-            timeout: 2000,
+            withCredentials: true
         });
-        console.dir(response.data);
+        console.log(response);
+        return response.data
     } catch (error) {
-        console.dir('Get users error:', error);
+        console.log('Get users error:', error);
     }
 }
 
@@ -143,6 +160,5 @@ async function updateTokens(old_refresh_token) {
         return Promise.reject(error);
     }
 }
-
 
 export { getStatusServer, postLoginUser, getUsers };

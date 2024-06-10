@@ -28,7 +28,7 @@ function mainMenu() {
     });
     div.addEventListener('keydown', evEsc => {
         // console.dir(e);
-        // evEsc.preventDefault();
+        evEsc.preventDefault();
         if (evEsc.code === 'Escape') {
             evEsc.currentTarget.classList.remove('menu-active');
         }
@@ -85,8 +85,6 @@ function onCloseClickModal(modal) {
 
 function onCloseEscModal(modal) {
     document.addEventListener('keydown', e => {
-        // console.dir(e);
-        e.preventDefault()
         if (e.code === 'Escape') {
             closeModalHandler(modal);
         }
@@ -119,7 +117,7 @@ function loginData() {
                 password: password.value,
             };
             // console.dir(sendForm.lastElementChild);
-            postLoginUser(sendData);
+            await postLoginUser(sendData);
 
             sndBtn.setAttribute('disabled', '');
             email.disabled = true;
@@ -134,12 +132,12 @@ loginData();
 
 const jsbtn = document.querySelector('.js-button-search');
 
-async function searchUsers() {
+function searchUsers() {
     
-    jsbtn.addEventListener('click', async (e) => {
+    jsbtn.addEventListener('click', (e) => {
         e.preventDefault()
         console.dir('Search users');
-        await getUsers();
+        getUsers();
     });
 }
 

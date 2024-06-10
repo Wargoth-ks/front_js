@@ -21,7 +21,7 @@ body::-webkit-scrollbar {
 }
 
 header {
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
     top: 0;
     background-color: #333;
@@ -36,7 +36,7 @@ main {
 
 .modal {
     display: none;
-    position: fixed;
+    /* position: fixed; */
     z-index: 1001;
     left: 0;
     top: 0;
@@ -44,7 +44,6 @@ main {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    padding-top: 30px;
 }
 
 .modal-title {
@@ -65,7 +64,10 @@ main {
     align-items: center;
     width: 30%;
     border-radius: 5%;
-    /* position: static; */
+    /* position: fixed; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
 }
 
 .close {
@@ -272,12 +274,14 @@ footer {
 
 .login-form {
     /* margin: auto; */
-    margin-top: 8%;
+    
     width: 80%;
     max-width: 500px;
     color: white;
     background-color: #111;
     box-shadow: rgba(211, 202, 202, 0.45) 1px 1px 40px 0px inset;
+    position: fixed;
+    margin-top: 120px;
 }
 
 #loginPassword {
@@ -290,6 +294,8 @@ footer {
     color: white;
     background-color: #111;
     box-shadow: rgba(211, 202, 202, 0.45) 1px 1px 40px 0px inset;
+    position: fixed;
+    margin-top: 200px;
 }
 
 #inputImg {
