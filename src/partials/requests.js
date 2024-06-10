@@ -7,20 +7,21 @@ let BASE_URL = 'https://addressbook-wargcorp-8f592fab.koyeb.app/api';
 // axios.defaults.baseURL = BASE_URL;
 // axios.defaults.headers.get['Content-Type'] = 'application/json';
 
-const axiosInstanse = axios.create({
+const axiosInstance = axios.create({
     baseURL: BASE_URL,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-    },
+    }, 
 });
 
-// axiosRetry(axiosInstanse, {
-//     retries: 3,
-//     retryCondition: () => true,
-// });
+axiosRetry(axiosInstance, {
+    retries: 3,
+    retryCondition: () => true,
+    // retryDelay: retryCount => retryCount * 1000,
+});
 
-axiosInstanse.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     request => {
         const old_access_token = localStorage.getItem('access_token');
         if (old_access_token) {
@@ -31,36 +32,37 @@ axiosInstanse.interceptors.request.use(
     },
     error => {
         // Do something with request error
-        // console.dir(`Request error: ${error}`);
+        console.dir(`Request error: ${error}`);
         return Promise.reject(error);
     }
 );
 
-axiosInstanse.interceptors.response.use(
+axiosInstance.interceptors.response.use(
     response => {
         return response;
     },
     async error => {
         const originalRequest = error.config;
         if (
-            (error.response &&
-            error.response.status == 401) &&
-            localStorage.getItem('refresh_token')
+            error.response &&
+            error.response.status == 401 &&
+            !originalRequest._retry
         ) {
+            originalRequest._retry = true;
+            console.dir(error.response.status);
             try {
-                console.dir(error.response.status);
                 const old_refresh_token = localStorage.getItem('refresh_token');
-                updateAccessRefreshToken(old_refresh_token)
-                axiosInstanse.defaults.headers.common[
+                const new_tokens = await updateTokens(old_refresh_token);
+                console.dir(`New tokens: ${new_tokens}`);
+                const { access_token } = new_tokens;
+                originalRequest.headers[
                     'Authorization'
                 ] = `Bearer ${access_token}`;
-                return axiosInstanse(originalRequest);
+                return axiosInstance(originalRequest);
             } catch (refreshError) {
                 console.error('Token refresh failed:', refreshError);
-
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('refresh_token');
-                // window.location.href = '/auth/login';
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
                 return Promise.reject(refreshError);
             }
         }
@@ -70,7 +72,7 @@ axiosInstanse.interceptors.response.use(
 
 async function getStatusServer() {
     try {
-        const response = await axiosInstanse.get(BASE_URL + '/healthchecker');
+        const response = await axiosInstance.get('/healthchecker');
         console.log(response);
         return response;
     } catch (error) {
@@ -79,58 +81,54 @@ async function getStatusServer() {
 }
 
 async function postLoginUser(data) {
-    await axiosInstanse
-        .postForm('/auth/login', data, {
+    try {
+        const response = await axiosInstance.postForm('/auth/login', data, {
             headers: {
-                'content-type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-        })
-        .then(response => {
-            console.dir(response);
-            const { access_token, refresh_token } = response.data;
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('refresh_token', refresh_token);
-        })
-        .catch(error => {
-            console.log(error);
         });
+        console.dir(response);
+        const { access_token, refresh_token } = response.data;
+        localStorage.setItem('access_token', access_token);
+        localStorage.setItem('refresh_token', refresh_token);
+    } catch (error) {
+        console.log('Login error:', error);
+    }
 }
 
 async function getUsers() {
-    const access_token = localStorage.getItem('access_token');
-    await axiosInstanse
-        .get('/contacts/search', {
+    try {
+        const response = await axiosInstance.get('/contacts/search', {
             headers: {
-                Authorization: `Bearer ${access_token}`,
-                accept: 'application/json',
+                Accept: 'application/json',
+                // Authorization: `Bearer `
             },
-        })
-        .then(response => {
-            console.dir(response.data);
-        })
-        .catch(error => {
-            console.dir(error);
         });
+        console.dir(response.data);
+    } catch (error) {
+        console.dir('Get users error:', error);
+    }
 }
 
 // getUsers();
 
-async function updateAccessRefreshToken(refresh_token) {
-    await axiosInstanse
-        .get('/auth/refresh_token', {
+async function updateTokens(old_refresh_token) {
+    try {
+        const response = await axios.get(
+            `${BASE_URL}/auth/refresh_token`, {
             headers: {
-                Authorization: `Bearer ${refresh_token}`,
+                Authorization: `Bearer ${old_refresh_token}`,
             },
-        })
-        .then(response => {
-            console.dir(response);
-            const { access_token, refresh_token } = response.data;
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('refresh_token', refresh_token);
-        })
-        .catch(error => {
-            console.dir(error);
         });
+        console.dir(response);
+        const { access_token, refresh_token } = response.data;
+        localStorage.setItem('access_token', access_token);
+        localStorage.setItem('refresh_token', refresh_token);
+        return { access_token, refresh_token };
+    } catch (error) {
+        console.dir(error);
+        return Promise.reject(error);
+    }
 }
 
 // updateAccessRefreshToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZXdldDc2MzI3QG1meWF4LmNvbSIsImlhdCI6MTcxNzk0Nzk3OSwiZXhwIjoxNzE4NTUyNzc5LCJzY29wZSI6InJlZnJlc2hfdG9rZW4ifQ.CHIhHRDBCRa0sGJY41s0G_Z0j2BT_GXdowUUrYN27vk')

@@ -45,7 +45,8 @@ mainMenu();
 btns.forEach((btn, index) => {
     let modal = modals[index];
 
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault()
         modal.style.display = 'block';
 
         switch (index) {
@@ -131,8 +132,10 @@ loginData();
 
 const jsbtn = document.querySelector('.js-button-search');
 
-async function searchUsers() {
-    jsbtn.addEventListener('click', () => {
+function searchUsers() {
+    
+    jsbtn.addEventListener('click', (e) => {
+        e.preventDefault()
         console.dir('Search users');
         getUsers();
     });
