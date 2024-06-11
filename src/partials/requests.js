@@ -137,7 +137,7 @@ async function getUsers() {
         console.log(response);
         return response.data
     } catch (error) {
-        console.log('Get users error:', error);
+        console.dir('Get users error:', error);
     }
 }
 
