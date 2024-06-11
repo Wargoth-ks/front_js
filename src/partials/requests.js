@@ -132,33 +132,15 @@ async function getUsers() {
                 Accept: 'application/json',
                 // Authorization: `Bearer ${Storage.getItem('access_token')}`,
             },
-            withCredentials: true
+            withCredentials: true,
         });
         console.log(response);
-        return response.data
+        return response.data;
     } catch (error) {
-        console.dir('Get users error:', error);
+        console.log('Get users error:', error);
     }
 }
 
 // getUsers();
-
-async function updateTokens(old_refresh_token) {
-    try {
-        const response = await axios.get(`${BASE_URL}/auth/refresh_token`, {
-            headers: {
-                Authorization: `Bearer ${old_refresh_token}`,
-            },
-        });
-        console.dir('New pair of tokens', response.data);
-        const { access_token, refresh_token } = response.data;
-        Storage.setItem('access_token', access_token);
-        Storage.setItem('refresh_token', refresh_token);
-        return { access_token, refresh_token };
-    } catch (error) {
-        console.dir(error);
-        return Promise.reject(error);
-    }
-}
 
 export { getStatusServer, postLoginUser, getUsers };
