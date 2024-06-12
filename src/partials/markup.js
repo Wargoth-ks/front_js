@@ -29,4 +29,18 @@ const markupModalReg = `<div class="modal-content reg-form">
                 </form>
             </div>`;
 
-export { markupModalLogin, markupModalReg };
+
+function markupModalEvent(name, text, color, addtext='') {
+    return `<div class="eSubModal">
+                <h2 class="eTitle" style="color: ${color};">${name}</h2>
+                    <p class="eText" style="color: ${color};">
+                        ${text}
+                    </p>
+                    <p class="eText" style="color: ${color};">
+                        ${addtext}
+                    </p>
+                    <button class="eBtn">OK</button>
+            </div>`
+}
+
+export { markupModalLogin, markupModalReg, markupModalEvent };

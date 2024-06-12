@@ -1,7 +1,12 @@
 // import bootstrap from 'bootstrap'
 import { getStatusServer, postLoginUser, getUsers } from './partials/requests';
-import { markupModalLogin, markupModalReg } from './partials/markup';
-// getStatusServer();
+import {
+    markupModalEvent,
+    markupModalLogin,
+    markupModalReg,
+} from './partials/markup';
+
+getStatusServer();
 
 //// Menu after login
 const menuBtn = document.querySelector('.menu-btn');
@@ -45,8 +50,8 @@ mainMenu();
 btns.forEach((btn, index) => {
     let modal = modals[index];
 
-    btn.addEventListener('click', (e) => {
-        e.preventDefault()
+    btn.addEventListener('click', e => {
+        e.preventDefault();
         modal.style.display = 'block';
 
         switch (index) {
@@ -77,8 +82,8 @@ function onCheckBox() {
 function onCloseClickModal(modal) {
     const closeModal = modal.querySelector('.close');
 
-    closeModal.addEventListener('click', (e) => {
-        e.preventDefault()
+    closeModal.addEventListener('click', e => {
+        e.preventDefault();
         closeModalHandler(modal);
     });
 }
@@ -133,12 +138,29 @@ loginData();
 const jsbtn = document.querySelector('.js-button-search');
 
 function searchUsers() {
-    
-    jsbtn.addEventListener('click', (e) => {
-        e.preventDefault()
+    jsbtn.addEventListener('click', async e => {
+        e.preventDefault();
         console.dir('Search users');
-        getUsers();
+        await getUsers();
     });
 }
 
 searchUsers();
+
+function eventModal(name, text, color, addtext) {
+    const eventModal = document.querySelector('.eventModal');
+
+    eventModal.insertAdjacentHTML(
+        'afterbegin',
+        markupModalEvent(name, text, color, addtext)
+    );
+    eventModal.style.display = 'block';
+
+    const errOk = document.querySelector('.eBtn');
+    errOk.addEventListener('click', e => {
+        e.preventDefault();
+        closeModalHandler(eventModal);
+    });
+}
+
+export { eventModal };
