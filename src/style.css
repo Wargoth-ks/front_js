@@ -36,7 +36,7 @@ main {
 
 .modal {
     display: none;
-    /* position: fixed; */
+    position: fixed;
     z-index: 1001;
     left: 0;
     top: 0;
@@ -274,9 +274,8 @@ footer {
 
 .login-form {
     /* margin: auto; */
-
     width: 80%;
-    max-width: 500px;
+    /* max-width: 200px; */
     color: white;
     background-color: #111;
     box-shadow: rgba(211, 202, 202, 0.45) 1px 1px 40px 0px inset;
@@ -303,10 +302,11 @@ footer {
     height: 25px;
 }
 
+#registerName,
 #registerEmail,
 #registerPassword,
 #confirmPassword {
-    height: 20px;
+    height: 10px;
 }
 
 
@@ -390,7 +390,7 @@ footer {
     align-items: center;
     /* width: 30%; */
     border-radius: 5%;
-    top: 50%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -100%);
     margin: auto;

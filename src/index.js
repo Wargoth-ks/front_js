@@ -1,12 +1,16 @@
 // import bootstrap from 'bootstrap'
-import { getStatusServer, postLoginUser, getUsers } from './partials/requests';
+import {
+    getStatusServer,
+    postLoginUser,
+    getUsers,
+    postSignUp,
+} from './partials/requests';
 import {
     markupModalEvent,
     markupModalLogin,
     markupModalReg,
 } from './partials/markup';
 
-getStatusServer();
 
 //// Menu after login
 const menuBtn = document.querySelector('.menu-btn');
@@ -135,6 +139,47 @@ function loginData() {
 
 loginData();
 
+function signupData() {
+    const regBtn = document.querySelector('#registerBtn');
+
+    regBtn.addEventListener('click', e => {
+        console.dir('Open reg form');
+        const sendRegForm = document.querySelector('#fileImg');
+        const sndBtn = sendRegForm.lastElementChild;
+        const closeElement = sendRegForm.parentNode.parentElement;
+
+        // console.dir(sendRegForm.elements[4]);
+        // console.dir(sndBtn);
+        sendRegForm.addEventListener('submit', async data => {
+            data.preventDefault();
+            let imageAvatar = sendRegForm.elements[4].files[0];
+
+            const {
+                target: { username, email, password, avatar },
+            } = data;
+
+            const sendData = {
+                username: username.value,
+                email: email.value,
+                password: password.value,
+                avatar: 'avatar',
+            };
+
+            const jsonData = JSON.stringify(sendData);
+            await postSignUp(jsonData, imageAvatar);
+
+            sndBtn.setAttribute('disabled', '');
+            username.disabled = true;
+            email.disabled = true;
+            password.disabled = true;
+            avatar.disabled = true;
+
+            setTimeout(closeModalHandler, 3000, closeElement);
+        });
+    });
+}
+signupData();
+
 const jsbtn = document.querySelector('.js-button-search');
 
 function searchUsers() {
@@ -156,8 +201,8 @@ function eventModal(name, text, color, addtext) {
     );
     eventModal.style.display = 'block';
 
-    const errOk = document.querySelector('.eBtn');
-    errOk.addEventListener('click', e => {
+    const eBtn = document.querySelector('.eBtn');
+    eBtn.addEventListener('click', e => {
         e.preventDefault();
         closeModalHandler(eventModal);
     });

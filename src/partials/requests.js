@@ -1,6 +1,13 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { eventModal } from '..';
+import {
+    messConfirm,
+    messNotFound,
+    messOtherError,
+    messUnAuth,
+    messLogOk,
+} from './msgs.js';
 
 let BASE_URL = 'http://0.0.0.0:8000/api';
 
@@ -16,12 +23,14 @@ const axiosInstance = axios.create({
 
 axiosRetry(axiosInstance, {
     retries: 3,
+    
+    shouldResetTimeout: true,
     retryDelay: retryCount => {
         console.log(`retry attempt: ${retryCount}`);
         return retryCount * 2000; // time interval between retries
     },
-    retryCondition: error => {
-        return error.code === 'ECONNABORTED' || error.response.status === 500;
+    retryCondition: e => {
+        return (e.code === 'ECONNABORTED' || e.response.status === 500);
     },
 });
 
@@ -65,92 +74,92 @@ axiosInstance.interceptors.response.use(
     }
 );
 
+async function getStatusServer() {
+    try {
+        const resp = await axiosInstance.get('/healthchecker');
+        console.log(resp.status);
+        return resp.status;
+    } catch (error) {
+        console.log(error);
+        return Promise.reject(error);
+    }
+}
+
+getStatusServer()
+
 async function updateTokens() {
     try {
-        const response = await axiosInstance.get(
-            `${BASE_URL}/auth/refresh_token`,
-            {
-                withCredentials: true,
-            }
-        );
+        const response = await axiosInstance.get('/auth/refresh_token', {
+            withCredentials: true,
+        });
         console.dir('New pair of tokens', response.data);
-        // const { access_token, refresh_token } = response.data;
-        // return { access_token, refresh_token };
     } catch (error) {
         console.dir(error);
         return Promise.reject(error);
     }
 }
 
-// updateTokens()
+async function postSignUp(jsonData, avatar) {
+    const formData = new FormData();
+    formData.append('body', jsonData);
+    formData.append('avatar', avatar);
 
-async function getStatusServer() {
-    try {
-        const response = await axiosInstance.get('/healthchecker');
-        console.log(response.status);
-        // return response;
-    } catch (error) {
-        console.error(error);
-    }
+    const res = await axiosInstance
+        .post('/auth/signup', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .then(response => {
+            console.dir(response.data.detail);
+            eventModal('Success!!!', `${response.data.detail}!`, 'green');
+        })
+        .catch(error => {
+            const err = error.response;
+            console.dir('Conflict: status 409', err);
+            if (err.status == 409) {
+                eventModal('Error', err.data.Detail, 'red');
+            }
+        });
+    return res;
 }
+
+// postSignUp();
 
 async function postLoginUser(data) {
     return await axiosInstance
-        .postForm('/auth/login', data, {
+        .post('/auth/login', data, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
         })
         .then(response => {
-            localStorage.setItem('isLogged', 'true');
-            eventModal('Success', 'Welcome, friend!!!', 'green');
             console.dir(response.data);
+            localStorage.setItem('isLogged', 'true');
+            eventModal(...messLogOk);
         })
         .catch(error => {
-            console.log('Login error:', error);
-            if (error) {
-                eventModal(
-                    'Error',
-                    'Wrong email or password!!!',
-                    'red',
-                    'Please, try again!'
-                );
+            console.log('Login error:', error.response);
+            const err = error.response;
+
+            switch (err.status) {
+                case 404:
+                    eventModal(...messNotFound);
+                    break;
+                case 401:
+                    eventModal(...messConfirm);
+                    break;
+                default:
+                    let msg = `${err.data.Detail[0].msg}`;
+                    eventModal(
+                        ...messOtherError,
+                        msg.charAt(0).toUpperCase() + msg.slice(1)
+                    );
             }
         });
 
     // return Promise.reject(error);
 }
-
-// async function postLoginUser(data) {
-//     try {
-//         const response = await axiosInstance.postForm('/auth/login', data, {
-//             headers: {
-//                 'Content-Type': 'application/x-www-form-urlencoded',
-//             },
-//         });
-//         console.dir(response);
-//     } catch (error) {
-//         console.log('Login error:', error);
-//         if (error) {
-//             errorModal()
-//         }
-//         // return Promise.reject(error);
-//     }
-// }
-
-// async function getUsers() {
-//     try {
-//         const response = await axiosInstance.get('/contacts/search', {
-//             headers: {
-//                 Accept: 'application/json',
-//             },
-//         });
-//         console.log(response.data);
-//         // return response.data;
-//     } catch (error) {
-//         console.log('Get users error:', error);
-//     }
-// }
 
 async function getUsers() {
     return await axiosInstance
@@ -163,15 +172,12 @@ async function getUsers() {
             console.log(response.data);
         })
         .catch(error => {
-            console.dir(error.response.statusText);
-            eventModal(
-                'Error',
-                'You are not Log In!!!',
-                'red',
-                'Please, try again!'
-            );
-            localStorage.setItem('isLogged', 'false');
+            if (error) {
+                console.dir(error.response.statusText);
+                eventModal(...messUnAuth);
+                localStorage.setItem('isLogged', 'false');
+            }
         });
 }
 
-export { getStatusServer, postLoginUser, getUsers };
+export { getStatusServer, postLoginUser, postSignUp, getUsers };
