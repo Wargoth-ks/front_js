@@ -1,6 +1,7 @@
 const markupModalLogin = `<div class="modal-content login-form">
                 <span class="close" id="loginClose">&times;</span>
                 <h2 class="modal-title">Login</h2>
+                
                 <form class="form">
                     <label for="loginEmail">Email:</label>
                     <input type="email" id="loginEmail" name="email" required>

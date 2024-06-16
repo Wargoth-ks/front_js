@@ -3,7 +3,6 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('./images/logo.jpg');
-    /* background-attachment: fixed; */
     background-size: 100%;
     height: 500vh;
 }
@@ -13,15 +12,13 @@ body::-webkit-scrollbar {
 }
 
 .container {
-    max-width: 1200px;
+    /* max-width: 1200px; */
     margin: 0 auto;
-    /* padding: 0 30px; */
     position: relative;
     overflow-x: hidden;
 }
 
 header {
-    /* position: fixed; */
     width: 100%;
     top: 0;
     background-color: #333;
@@ -64,7 +61,6 @@ main {
     align-items: center;
     width: 30%;
     border-radius: 5%;
-    /* position: fixed; */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -100%);
@@ -140,7 +136,6 @@ footer {
 }
 
 .menu {
-    /* display: none; */
     position: fixed;
     left: 0;
     top: 0;
@@ -160,49 +155,34 @@ footer {
 
 .menu-list {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 50%;
+    justify-content: center;
+    align-items: left;
+    height: 30%;
+    /* margin-left: 20%; */
+    left: 100;
     flex-direction: column;
     color: white;
-    font-size: large;
     text-decoration: none;
 }
 
 .menu-btn {
     width: 100px;
     height: 0px;
-    /* background-color: rgb(41, 38, 38); */
     color: white;
     position: absolute;
     text-align: right;
     right: -80px;
-    top: 10px;
+    top: 14px;
     font-size: 20px;
     text-decoration: none;
     margin-right: -10px;
     z-index: 1002;
-    /* box-shadow: rgba(245, 238, 238, 0.35) 0px -50px 36px -28px inset; */
     opacity: 1;
 }
 
 .menu-btn:hover {
     color: red;
 }
-
-/* .form-menu {
-    width: 150px;
-    
-}
-
-.menu-search-button {
-    width: 150px;
-    margin-top: 10px;
-    background-color: #333;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-} */
 
 
 .menu-active {
@@ -220,8 +200,11 @@ footer {
     overflow: hidden;
     background-color: #333;
     display: flex;
-    justify-content: right;
-    align-items: center;
+    flex-direction:row;
+    justify-content: flex-end;
+    align-items: end;
+    /* left: 0%; */
+    width: 100%;
     transition: transform 0.5s;
     box-shadow: rgba(245, 238, 238, 0.35) 0px -50px 36px -28px inset;
 }
@@ -232,7 +215,7 @@ footer {
 
 .js-list ul li a,
 .js-list ul li button {
-    display: block;
+    display: flex;
     color: white;
     text-align: center;
     padding: 14px 16px;
@@ -240,17 +223,13 @@ footer {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1.5ch;
 }
 
 .js-list ul li a:hover,
 .js-list ul li button:hover {
     box-shadow: rgba(22, 21, 21, 0.45) 1px 1px 40px 0px inset;
 }
-
-/* .js-list-move {
-    transform: translateX(30%);
-} */
 
 .checkbox-container {
     display: flex;
@@ -273,9 +252,7 @@ footer {
 
 
 .login-form {
-    /* margin: auto; */
     width: 80%;
-    /* max-width: 200px; */
     color: white;
     background-color: #111;
     box-shadow: rgba(211, 202, 202, 0.45) 1px 1px 40px 0px inset;
@@ -315,38 +292,69 @@ footer {
     height: 35px;
 }
 
-@media screen and (max-width: 600px) {
+#menu-id {
+    text-align: center;
+    align-items: center;
+}
+
+#menu-avatar {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    border-radius: 100%;
+    /* Задайте начальный размер */
+    height: auto;
+    /* Автоматическое масштабирование по высоте */
+    margin-bottom: 2%;
+
+}
+
+@media screen and (max-width: 1080px) {
     .menu {
-        width: 50%;
-        /* Увеличиваем ширину меню до 100% */
+        width: 40%;
+    }
+
+    #menu-avatar {
+        width: 70%;
+        /* Пример уменьшения размера для меньших экранов */
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #menu-avatar {
+        width: 170px;
+        /* Пример еще большего уменьшения размера */
     }
 }
 
 #form-search-input {
-    width: 75%;
-    /* Уменьшаем ширину поля ввода */
-    display: inline-block;
+    width: 70%;
+    /* display: flex; */
     top: 0;
-    /* left: 0; */
-    margin-left: 35px;
-    /* Делаем его строчно-блочным элементом */
     border-radius: 50px;
-    height: 45px;
+    height: 2.5em;
+    left: 0%;
     text-align: center;
+    align-items: center;
+    position: relative;
+    margin-top: 80%;
+    margin-bottom: 10px;
+    font-size: 2ch;
 }
 
 .js-button-search {
-    display: inline-block;
-    /* Делаем кнопку поиска строчно-блочным элементом */
-    /* height: 55px; */
-    width: 75%;
+    /* display: block; */
+    width: 70%;
     height: 40px;
-    /* padding: 0px; */
-    margin-top: 15px;
-    margin-left: 35px;
+    top: 0;
     border-radius: 15px;
     background-color: black;
+    align-items: center;
+    text-align: center;
     color: white;
+    font-size: 2ch;
     box-shadow: rgba(105, 95, 95, 0.35) 0px -50px 36px -28px inset;
 }
 
@@ -357,6 +365,10 @@ footer {
 .js-menu-items {
     text-decoration: none;
     color: white;
+    font-size: 1.5vmax;
+    margin-top: 10%;
+    padding-bottom: 5%;
+    margin-left: 20%;
 }
 
 
@@ -377,18 +389,15 @@ footer {
     text-align: center;
     width: 100%;
     font-size: 22px;
-    /* color: red; */
     color: none;
 }
 
 .eSubModal {
     padding: 15px;
     border: 1px solid #888;
-    /* max-width: 50px; */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* width: 30%; */
     border-radius: 5%;
     top: 60%;
     left: 50%;
@@ -402,7 +411,6 @@ footer {
 }
 
 .eText {
-    /* color: rgb(240, 9, 9); */
     color: none;
     text-align: center;
 }

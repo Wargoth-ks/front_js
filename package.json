@@ -18,9 +18,11 @@
     "url": "https://github.com/Wargoth-ks/front_js/issues"
   },
   "dependencies": {
+    "@cloudinary/url-gen": "^1.19.0",
     "axios": "^1.7.2",
     "axios-retry": "^4.4.0",
     "bootstrap": "^5.3.3",
+    "cloudinary": "^2.2.0",
     "fs": "^0.0.1-security",
     "modern-normalize": "^1.1.0",
     "qs": "^6.12.1"
@@ -28,11 +30,19 @@
   "devDependencies": {
     "@parcel/transformer-sass": "^2.6.0",
     "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "events": "^3.3.0",
+    "https-browserify": "^1.0.0",
     "parcel": "^2.6.0",
     "parcel-reporter-clean-dist": "^1.0.4",
     "path-browserify": "^1.0.1",
     "posthtml-include": "^1.7.4",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "querystring-es3": "^0.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.3",
+    "vm-browserify": "^1.1.2"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead"
 }

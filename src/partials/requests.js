@@ -9,7 +9,8 @@ import {
     messLogOk,
 } from './msgs.js';
 
-let BASE_URL = 'http://0.0.0.0:8000/api';
+// let BASE_URL = 'http://0.0.0.0:8000/api';
+const BASE_URL = process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -18,19 +19,19 @@ const axiosInstance = axios.create({
         Accept: 'application/json',
     },
     withCredentials: true,
-    // timeout: 5000,
 });
 
 axiosRetry(axiosInstance, {
     retries: 3,
-    
+
     shouldResetTimeout: true,
     retryDelay: retryCount => {
         console.log(`retry attempt: ${retryCount}`);
-        return retryCount * 2000; // time interval between retries
+        return retryCount * 100;
     },
     retryCondition: e => {
-        return (e.code === 'ECONNABORTED' || e.response.status === 500);
+        const err = e.response;
+        return (err && err.status === 500) || e.code === 'ECONNABORTED';
     },
 });
 
@@ -75,17 +76,18 @@ axiosInstance.interceptors.response.use(
 );
 
 async function getStatusServer() {
-    try {
-        const resp = await axiosInstance.get('/healthchecker');
-        console.log(resp.status);
-        return resp.status;
-    } catch (error) {
-        console.log(error);
-        return Promise.reject(error);
-    }
+    return await axiosInstance
+        .get('/healthchecker')
+        .then(response => {
+            console.log(response.status);
+        })
+        .catch(err => {
+            console.log(err.status);
+            return Promise.reject(err);
+        });
 }
 
-getStatusServer()
+getStatusServer();
 
 async function updateTokens() {
     try {
@@ -161,6 +163,17 @@ async function postLoginUser(data) {
     // return Promise.reject(error);
 }
 
+async function postLogoutUser() {
+    return await axiosInstance
+        .get('/auth/logout')
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
 async function getUsers() {
     return await axiosInstance
         .get('/contacts/search', {
@@ -180,4 +193,28 @@ async function getUsers() {
         });
 }
 
-export { getStatusServer, postLoginUser, postSignUp, getUsers };
+async function getUserProfile() {
+    return await axiosInstance
+        .get('/users/my_profile', {
+            headers: {
+                Accept: 'application/json',
+            },
+            // withCredentials: true,
+        })
+        .then(response => {
+            // console.dir(response.data.avatar);
+            return response.data.avatar
+        })
+        .catch(error => {
+            console.dir(error.response.statusText);
+        });
+}
+
+export {
+    getStatusServer,
+    postLoginUser,
+    postLogoutUser,
+    postSignUp,
+    getUsers,
+    getUserProfile,
+};

@@ -1,9 +1,11 @@
 // import bootstrap from 'bootstrap'
+// import { v2 as cloudinary } from 'cloudinary';
 import {
-    getStatusServer,
     postLoginUser,
+    postLogoutUser,
     getUsers,
     postSignUp,
+    getUserProfile,
 } from './partials/requests';
 import {
     markupModalEvent,
@@ -11,21 +13,25 @@ import {
     markupModalReg,
 } from './partials/markup';
 
-
-//// Menu after login
-const menuBtn = document.querySelector('.menu-btn');
+// Menu after login
 const menuToggle = document.querySelector('.menu');
+const menuBtn = document.querySelector('.menu-btn');
 const div = document.querySelector('div.menu');
 
 const btns = document.querySelectorAll('.js-btns');
 const modals = document.querySelectorAll('.modal');
 // const jsList = document.querySelector('.js-list')
+const jsbtn = document.querySelector('.js-button-search');
 
-function menuShowHide() {
+async function menuShowHide() {
+    // const avatar = document.querySelector('#menu-avatar');
+
     menuToggle.classList.toggle('menu-active');
     menuBtn.style.opacity = 1;
 
     if (div.classList.contains('menu-active')) {
+        let user = await getUserProfile();
+        document.querySelector('#menu-avatar').src = user;
         menuBtn.style.opacity = 0;
     }
 }
@@ -35,18 +41,11 @@ function mainMenu() {
         eClick.preventDefault();
         menuShowHide();
     });
-    div.addEventListener('keydown', evEsc => {
-        // console.dir(e);
-        evEsc.preventDefault();
-        if (evEsc.code === 'Escape') {
-            evEsc.currentTarget.classList.remove('menu-active');
-        }
-    });
-    div.addEventListener('mouseleave', eMouse => {
-        eMouse.preventDefault();
-        // console.dir(!e.currentTarget.classList.contains('menu-active'));
-        menuShowHide();
-    });
+    // div.addEventListener('mouseleave', eMouse => {
+    //     eMouse.preventDefault();
+    //     // console.dir(!e.currentTarget.classList.contains('menu-active'));
+    //     menuShowHide();
+    // });
 }
 
 mainMenu();
@@ -139,6 +138,17 @@ function loginData() {
 
 loginData();
 
+function logoutUser() {
+    const logout = document.querySelector('.logout-item');
+    // console.dir(logout);
+    logout.addEventListener('click', async e => {
+        e.preventDefault();
+        await postLogoutUser();
+    });
+}
+
+logoutUser();
+
 function signupData() {
     const regBtn = document.querySelector('#registerBtn');
 
@@ -180,11 +190,9 @@ function signupData() {
 }
 signupData();
 
-const jsbtn = document.querySelector('.js-button-search');
-
 function searchUsers() {
     jsbtn.addEventListener('click', async e => {
-        e.preventDefault();
+        // e.preventDefault();
         console.dir('Search users');
         await getUsers();
     });
