@@ -202,7 +202,7 @@ async function getUserProfile() {
             // withCredentials: true,
         })
         .then(response => {
-            // console.dir(response.data.avatar);
+            console.dir(response.data.avatar);
             return response.data.avatar
         })
         .catch(error => {
