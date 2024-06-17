@@ -9,8 +9,8 @@ import {
     messLogOk,
 } from './msgs.js';
 
-// let BASE_URL = 'http://0.0.0.0:8000/api';
-const BASE_URL = process.env.URL;
+let BASE_URL = 'http://0.0.0.0:8000/api';
+// const BASE_URL = process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -23,42 +23,42 @@ const axiosInstance = axios.create({
 
 axiosRetry(axiosInstance, {
     retries: 3,
-
     shouldResetTimeout: true,
     retryDelay: retryCount => {
-        console.log(`retry attempt: ${retryCount}`);
+        console.log(`Retry attempt: ${retryCount}`);
         return retryCount * 100;
     },
     retryCondition: e => {
         const err = e.response;
+        console.log('Error 500: Server is down');
         return (err && err.status === 500) || e.code === 'ECONNABORTED';
     },
 });
 
 axiosInstance.interceptors.request.use(
-    request => {
+    async request => {
         console.dir('Request: success!!!');
         return request;
     },
-    error => {
+    async error => {
         console.dir(`Request error: ${error}`);
         return Promise.reject(error);
     }
 );
 
 axiosInstance.interceptors.response.use(
-    response => {
+    async response => {
         console.log('Response: Success!!!');
         return response;
     },
     async error => {
-        const isLogged = localStorage.getItem('isLogged');
+        const err = error.response;
         if (
-            error.response &&
-            error.response.status == 401 &&
-            isLogged == 'true'
+            // err &&
+            err.status == 401 &&
+            err.data.detail == 'Could not validate credentials'
         ) {
-            console.dir(error.response.status);
+            console.dir('Interseptors: ', err.data.detail);
             const originalRequest = error.config;
             if (originalRequest._retry) {
                 originalRequest._retry = true;
@@ -67,7 +67,7 @@ axiosInstance.interceptors.response.use(
                 await updateTokens();
                 return axiosInstance(originalRequest);
             } catch (refreshError) {
-                console.error('Token refresh failed:', refreshError);
+                console.error('Token refresh failed:', refreshError.response);
                 return Promise.reject(refreshError);
             }
         }
@@ -75,30 +75,44 @@ axiosInstance.interceptors.response.use(
     }
 );
 
+function reloadWithTimeout() {
+    setTimeout(() => {
+        window.location.href = '/';
+    }, 3000);
+}
+
 async function getStatusServer() {
     return await axiosInstance
         .get('/healthchecker')
         .then(response => {
             console.log(response.status);
         })
-        .catch(err => {
-            console.log(err.status);
-            return Promise.reject(err);
+        .catch(internalErr => {
+            console.log(internalErr.status);
+            return Promise.reject(internalErr);
         });
 }
 
 getStatusServer();
 
 async function updateTokens() {
-    try {
-        const response = await axiosInstance.get('/auth/refresh_token', {
+    return await axiosInstance
+        .get('/auth/refresh_token', {
             withCredentials: true,
+        })
+        .then(response => {
+            console.dir('New pair of tokens', response.data);
+        })
+        .catch(error => {
+            const err = error.response;
+            if (
+                err.status == 401 &&
+                err.data.detail == 'Invalid refresh token'
+            ) {
+                console.dir(err.data);
+                return Promise.reject(error);
+            }
         });
-        console.dir('New pair of tokens', response.data);
-    } catch (error) {
-        console.dir(error);
-        return Promise.reject(error);
-    }
 }
 
 async function postSignUp(jsonData, avatar) {
@@ -115,6 +129,7 @@ async function postSignUp(jsonData, avatar) {
         .then(response => {
             console.dir(response.data.detail);
             eventModal('Success!!!', `${response.data.detail}!`, 'green');
+            reloadWithTimeout()
         })
         .catch(error => {
             const err = error.response;
@@ -137,8 +152,8 @@ async function postLoginUser(data) {
         })
         .then(response => {
             console.dir(response.data);
-            localStorage.setItem('isLogged', 'true');
             eventModal(...messLogOk);
+            reloadWithTimeout()
         })
         .catch(error => {
             console.log('Login error:', error.response);
@@ -167,10 +182,17 @@ async function postLogoutUser() {
     return await axiosInstance
         .get('/auth/logout')
         .then(response => {
-            console.log(response);
+            console.log(response.data);
+            eventModal(
+                "Success!",
+                `${response.data}`,
+                "green",
+            )
+            reloadWithTimeout()
         })
         .catch(error => {
             console.log(error);
+            return Promise.reject(error);
         });
 }
 
@@ -188,7 +210,6 @@ async function getUsers() {
             if (error) {
                 console.dir(error.response.statusText);
                 eventModal(...messUnAuth);
-                localStorage.setItem('isLogged', 'false');
             }
         });
 }
@@ -199,14 +220,20 @@ async function getUserProfile() {
             headers: {
                 Accept: 'application/json',
             },
-            // withCredentials: true,
         })
         .then(response => {
             // console.dir(response.data.avatar);
-            return response.data.avatar
+            return response.data.avatar;
         })
         .catch(error => {
-            console.dir(error.response.statusText);
+            let err = error.response;
+            let msg = `${err.data.detail}`;
+            console.dir('User profile ERROR: ', error.response);
+            eventModal(
+                ...messUnAuth,
+                msg.charAt(0).toUpperCase() + msg.slice(1)
+            );
+            reloadWithTimeout()
         });
 }
 
