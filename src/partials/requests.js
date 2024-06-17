@@ -9,8 +9,8 @@ import {
     messLogOk,
 } from './msgs.js';
 
-let BASE_URL = 'http://0.0.0.0:8000/api';
-// const BASE_URL = process.env.URL;
+// let BASE_URL = 'http://0.0.0.0:8000/api';
+const BASE_URL = process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -129,7 +129,7 @@ async function postSignUp(jsonData, avatar) {
         .then(response => {
             console.dir(response.data.detail);
             eventModal('Success!!!', `${response.data.detail}!`, 'green');
-            reloadWithTimeout()
+            reloadWithTimeout();
         })
         .catch(error => {
             const err = error.response;
@@ -153,7 +153,7 @@ async function postLoginUser(data) {
         .then(response => {
             console.dir(response.data);
             eventModal(...messLogOk);
-            reloadWithTimeout()
+            reloadWithTimeout();
         })
         .catch(error => {
             console.log('Login error:', error.response);
@@ -183,12 +183,8 @@ async function postLogoutUser() {
         .get('/auth/logout')
         .then(response => {
             console.log(response.data);
-            eventModal(
-                "Success!",
-                `${response.data}`,
-                "green",
-            )
-            reloadWithTimeout()
+            eventModal('Success!', `${response.data}`, 'green');
+            reloadWithTimeout();
         })
         .catch(error => {
             console.log(error);
@@ -233,7 +229,7 @@ async function getUserProfile() {
                 ...messUnAuth,
                 msg.charAt(0).toUpperCase() + msg.slice(1)
             );
-            reloadWithTimeout()
+            reloadWithTimeout();
         });
 }
 
