@@ -41,11 +41,6 @@ function mainMenu() {
         eClick.preventDefault();
         menuShowHide();
     });
-    // div.addEventListener('mouseleave', eMouse => {
-    //     eMouse.preventDefault();
-    //     // console.dir(!e.currentTarget.classList.contains('menu-active'));
-    //     menuShowHide();
-    // });
 }
 
 mainMenu();
@@ -55,31 +50,76 @@ btns.forEach((btn, index) => {
 
     btn.addEventListener('click', e => {
         e.preventDefault();
-        modal.style.display = 'block';
+
+        modal.classList.add('modal-show');
 
         switch (index) {
             case 0:
                 modal.insertAdjacentHTML('afterbegin', markupModalLogin);
+                animModal();
                 break;
             case 1:
                 modal.insertAdjacentHTML('afterbegin', markupModalReg);
+                animModal();
                 onCheckBox();
                 break;
             default:
                 console.dir(index);
         }
+
+        animContent(modal);
+
         onCloseClickModal(modal);
         onCloseEscModal(modal);
     });
 });
 
-function onCheckBox() {
-    const inputImg = document.querySelector('#inputImg');
-    const checkBox = document.querySelector('#idCheckBox');
+function animContent(modal) {
+    modal.style.background = 'transparent';
+    const listanim = {
+        opacity: [0, 1],
+        transform: ['scale(0)', 'scale(1)'],
+        // transform: ['rotate(0)', 'rotate(1)'],
+    };
+    const timeAnim = {
+        fill: 'both',
+        duration: 300,
+        iterations: 1,
+    };
+    modal.animate(listanim, timeAnim);
 
-    checkBox.addEventListener('click', function () {
-        inputImg.disabled = !this.checked;
-    });
+    let activeAnimation;
+    const anim = modal.firstElementChild;
+
+    const startBlink = () => {
+        activeAnimation = anim.animate(
+            { opacity: [0.8, 1, 0.8] },
+            {
+                duration: 2000,
+                iterations: Infinity,
+            }
+        );
+    }
+
+    const stopBlink = () => {
+        if (activeAnimation) {
+            activeAnimation.cancel();
+        }
+    }
+    anim.addEventListener('mouseenter', startBlink);
+    anim.addEventListener('mouseleave', stopBlink);
+}
+
+function animModal() {
+    document.querySelector('.modal-content').classList.add('modal-anim');
+}
+
+function onCheckBox() {
+    document
+        .querySelector('#idCheckBox')
+        .addEventListener('click', function () {
+            document.querySelector('#inputImg').disabled = !this.checked;
+        });
 }
 
 function onCloseClickModal(modal) {
@@ -100,7 +140,7 @@ function onCloseEscModal(modal) {
 }
 
 function closeModalHandler(modal) {
-    modal.style.display = 'none';
+    modal.classList.remove('modal-show');
     modal.innerHTML = '';
 }
 

@@ -9,8 +9,8 @@ import {
     messLogOk,
 } from './msgs.js';
 
-// let BASE_URL = 'http://0.0.0.0:8000/api';
-const BASE_URL = process.env.URL;
+let BASE_URL = 'http://0.0.0.0:8000/api';
+// const BASE_URL = process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,

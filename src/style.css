@@ -51,20 +51,50 @@ main {
 }
 
 .modal-content {
+    display: flex;
     background-color: #fefefe;
     margin: 3% auto;
     padding: 15px;
     border: 1px solid #888;
     max-width: 300px;
-    display: flex;
+    position: fixed;
     flex-direction: column;
     align-items: center;
     width: 30%;
     border-radius: 5%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -100%);
+    /* transform: translate(-50%, -100%); */
 }
+
+.modal-show {
+    display: flex;
+}
+
+.modal-anim {
+    animation: modal-show 0.3s linear forwards;
+    
+}
+
+
+@keyframes modal-show {
+    0% {
+        transform: translate(-150%, -150%);
+        rotate: 0turn;
+    }
+
+    50% {
+        transform: translate(-100%, -125%);
+        rotate: 0.5turn;
+    }
+
+    100% {
+        transform: translate(-50%, -100%);
+        rotate: 1turn;
+    }
+
+}
+
 
 .close {
     color: #a52222;
@@ -200,7 +230,7 @@ footer {
     overflow: hidden;
     background-color: #333;
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
     justify-content: flex-end;
     align-items: end;
     /* left: 0%; */
