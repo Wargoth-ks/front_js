@@ -1,6 +1,6 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { eventModal } from '..';
+import { contactProfile, eventModal, scaleAnimList } from '..';
 import {
     messConfirm,
     messNotFound,
@@ -9,8 +9,10 @@ import {
     messLogOk,
 } from './msgs.js';
 
-let BASE_URL = 'http://0.0.0.0:8000/api';
-// const BASE_URL = process.env.URL;
+import { murkupContacts } from './markup.js';
+
+// let BASE_URL = 'http://0.0.0.0:8000/api';
+const BASE_URL = process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -200,11 +202,20 @@ async function getUsers() {
             },
         })
         .then(response => {
-            console.log(response.data);
+
+            let listData = document.querySelector('.listContacts');
+            listData.innerHTML = ''
+            listData.insertAdjacentHTML(
+                'afterbegin',
+                murkupContacts(response.data)
+            );
+            scaleAnimList([...listData.children])
+            contactProfile(listData, response.data)
+            console.log(response.data, response.data.length);
         })
         .catch(error => {
             if (error) {
-                console.dir(error.response.statusText);
+                console.dir(error);
                 eventModal(...messUnAuth);
             }
         });

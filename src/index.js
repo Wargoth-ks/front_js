@@ -11,6 +11,7 @@ import {
     markupModalEvent,
     markupModalLogin,
     markupModalReg,
+    marcupCard,
 } from './partials/markup';
 
 // Menu after login
@@ -56,63 +57,122 @@ btns.forEach((btn, index) => {
         switch (index) {
             case 0:
                 modal.insertAdjacentHTML('afterbegin', markupModalLogin);
-                animModal();
+                // animModal(modal); // !!! <- change this
                 break;
             case 1:
                 modal.insertAdjacentHTML('afterbegin', markupModalReg);
-                animModal();
+                // animModal(modal); // !!! <- change this
                 onCheckBox();
                 break;
             default:
                 console.dir(index);
         }
 
-        animContent(modal);
+        modal.firstChild.classList.add('modal-anim');
+        modal.style.background = 'none';
+
+        iterOneAnim(modal);
+        blinkAnim(modal);
 
         onCloseClickModal(modal);
         onCloseEscModal(modal);
     });
 });
 
-function animContent(modal) {
-    modal.style.background = 'transparent';
-    const listanim = {
-        opacity: [0, 1],
-        transform: ['scale(0)', 'scale(1)'],
-        // transform: ['rotate(0)', 'rotate(1)'],
-    };
-    const timeAnim = {
-        fill: 'both',
-        duration: 300,
-        iterations: 1,
-    };
-    modal.animate(listanim, timeAnim);
+async function iterOneAnim(elem) {
+    await elem.animate(
+        {
+            opacity: [0, 1],
+            transform: ['scale(0)', 'scale(1)'],
+        },
+        {
+            fill: 'both',
+            duration: 300,
+            iterations: 1,
+        }
+    );
+    setTimeout(() => {
+        elem.style.background = 'rgba(0, 0, 0, 0.4)';
+    }, 301);
 
+    // console.dir('Modals: ', elem);
+}
+
+async function blinkAnim(elem) {
     let activeAnimation;
-    const anim = modal.firstElementChild;
 
-    const startBlink = () => {
-        activeAnimation = anim.animate(
+    const anim = elem.firstChild;
+    const startBlink = async e => {
+        e.preventDefault();
+
+        activeAnimation = await anim.animate(
             { opacity: [0.8, 1, 0.8] },
             {
+                fill: 'both',
                 duration: 2000,
                 iterations: Infinity,
             }
         );
-    }
+    };
 
-    const stopBlink = () => {
+    const stopBlink = async () => {
         if (activeAnimation) {
-            activeAnimation.cancel();
+            await activeAnimation.cancel();
         }
-    }
-    anim.addEventListener('mouseenter', startBlink);
-    anim.addEventListener('mouseleave', stopBlink);
+    };
+    await anim.addEventListener('mouseenter', startBlink);
+    await anim.addEventListener('mouseleave', stopBlink);
 }
 
-function animModal() {
-    document.querySelector('.modal-content').classList.add('modal-anim');
+async function scaleAnimList(elems) {
+    let activeAnim;
+    let delay = 0;
+
+    elems.forEach(elem => {
+        setTimeout(async () => {
+            await elem.animate(
+                {
+                    opacity: [0, 1],
+                    transform: ['scale(0)', 'scale(1)'],
+                    rotate: ['0turn', '0.5turn', '1turn'],
+                },
+                {
+                    fill: 'both',
+                    duration: 500,
+                    iterations: 1,
+                }
+            );
+        }, delay);
+        delay += 150;
+    });
+
+    for (const elem of elems) {
+        await elem.addEventListener('mouseenter', async e => {
+            await e.preventDefault();
+            activeAnim = await elem.animate(
+                {
+                    transform: ['scale(0.95)', 'scale(1)', 'scale(0.95)'],
+                    opacity: [0.8, 1, 0.8],
+                },
+                {
+                    fill: 'both',
+                    duration: 200,
+                    iterations: Infinity,
+                }
+            );
+        });
+        await elem.addEventListener('mouseleave', async e => {
+            await e.preventDefault();
+            if (activeAnim) {
+                await activeAnim.cancel();
+            }
+        });
+    }
 }
+
+// function animModal(elem) { // !!! <- change this
+//     elem.firstChild.classList.add('modal-anim');
+// }
 
 function onCheckBox() {
     document
@@ -140,6 +200,7 @@ function onCloseEscModal(modal) {
 }
 
 function closeModalHandler(modal) {
+    marcupCard;
     modal.classList.remove('modal-show');
     modal.innerHTML = '';
 }
@@ -230,15 +291,43 @@ function signupData() {
 }
 signupData();
 
-function searchUsers() {
+async function searchUsers() {
     jsbtn.addEventListener('click', async e => {
-        // e.preventDefault();
+        e.preventDefault();
         console.dir('Search users');
         await getUsers();
     });
 }
 
 searchUsers();
+
+async function contactProfile(listCards, data) {
+    let cardProfile = document.querySelector('.cardProfile');
+    let arrayCard = [...listCards.children];
+
+    arrayCard.forEach((card, index) => {
+        card.addEventListener('click', async (e) => {
+            await e.preventDefault();
+            // console.dir("Dataset: ", card);
+            // console.dir("Target:", data[index]);
+            if (e.target == card) {
+                cardProfile.insertAdjacentHTML(
+                    'afterbegin',
+                    marcupCard(data[index])
+                );
+                cardProfile.classList.add('cardShow');
+
+                let btnProfile = document.querySelector('.profileButton');
+                
+                btnProfile.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    cardProfile.classList.remove('cardShow');
+                    cardProfile.innerHTML = ''
+                });
+            }
+        });
+    });
+}
 
 function eventModal(name, text, color, addtext) {
     const eventModal = document.querySelector('.eventModal');
@@ -256,4 +345,4 @@ function eventModal(name, text, color, addtext) {
     });
 }
 
-export { eventModal };
+export { eventModal, iterOneAnim, blinkAnim, scaleAnimList, contactProfile };
