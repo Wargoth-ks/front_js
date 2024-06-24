@@ -55,7 +55,7 @@ function murkupContacts(contacts) {
                 ${name} ${surname}
             </h2>
             <p class="cardInfo">
-                Contact info: <a href="#">Detail here</a>
+                Contact info: <a class="linkProfile" href="contact_info">Detail here</a>
             </p>
         </li>`
         )
@@ -79,17 +79,17 @@ function marcupCard(card) {
                 </div>
                 <div class="profileDetails">
                     <button class="profileButton">
-                        <svg class="cancelIcon" xmlns="http://www.w3.org/2000/svg" style="position: relative; float: right" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="butt" stroke-linejoin="bevel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                        <svg class="cancelIcon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="butt" stroke-linejoin="bevel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                     </button>
                     <h3 class="profileTitle">${name} ${surname}</h3>
                     <p class="profileInfo">
                         <ul class="profileList">
-                            <li>ID: ${id}</li>
-                            <li>Email: ${email}</li>
-                            <li>Phone: ${phone}</li>
-                            <li>Birthday: ${birthday}</li>
-                            <li>Created: ${created_at}</li>
-                            <li>Updated: ${updated_at}</li>
+                            <li id="idProfile"><span class="labelProfile">ID:</span> <span class="valueProfile">${id}</span></li>
+                            <li id="emailProfile"><span class="labelProfile">Email:</span> <span class="valueProfile">${email}</span></li>
+                            <li id="phoneProfile"><span class="labelProfile">Phone:</span> <span class="valueProfile">${phone}</span></li>
+                            <li id="birthdayProfile"><span class="labelProfile">Birthday:</span> <span class="valueProfile">${birthday}</span></li>
+                            <li id="createdProfile"><span class="labelProfile">Created:</span> <span class="valueProfile">${created_at}</span></li>
+                            <li id="updatedProfile"><span class="labelProfile">Updated:</span> <span class="valueProfile">${updated_at}</span></li>
                         </ul>
                     </p>
                 </div>

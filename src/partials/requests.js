@@ -1,6 +1,6 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { contactProfile, eventModal, scaleAnimList } from '..';
+import { contactProfile, eventModal } from '..';
 import {
     messConfirm,
     messNotFound,
@@ -8,6 +8,7 @@ import {
     messUnAuth,
     messLogOk,
 } from './msgs.js';
+import { scaleAnimList } from './anim.js';
 
 import { murkupContacts } from './markup.js';
 
