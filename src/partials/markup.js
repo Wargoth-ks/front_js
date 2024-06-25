@@ -73,12 +73,19 @@ function marcupCard(card) {
         created_at,
         updated_at,
     } = card;
+
+    const tel = phone.replace( /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, 
+        '$1-$2-$3-$4-$5' )
+    
+    const cr_at = created_at.split('.')[0]
+    const up_at = updated_at.split('.')[0]
+
     return `<div class="profileContact">
                 <div class="imgProfile">
                     <img src="https://cdn.season-of-mist.com/media/catalog/product/cache/1/image/500x500/9df78eab33525d08d6e5fb8d27136e95/V/a/Various-Artists-In-Mordor-Where-The-Shadows-Are-Homage-To-Summoning-3CD-BOX-56809-1-1487319213.jpg" alt="">
                 </div>
                 <div class="profileDetails">
-                    <button class="profileButton">
+                    <button class="cancelButton">
                         <svg class="cancelIcon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="butt" stroke-linejoin="bevel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                     </button>
                     <h3 class="profileTitle">${name} ${surname}</h3>
@@ -86,14 +93,60 @@ function marcupCard(card) {
                         <ul class="profileList">
                             <li id="idProfile"><span class="labelProfile">ID:</span> <span class="valueProfile">${id}</span></li>
                             <li id="emailProfile"><span class="labelProfile">Email:</span> <span class="valueProfile">${email}</span></li>
-                            <li id="phoneProfile"><span class="labelProfile">Phone:</span> <span class="valueProfile">${phone}</span></li>
+                            <li id="phoneProfile"><span class="labelProfile">Phone:</span> <span class="valueProfile">${tel}</span></li>
                             <li id="birthdayProfile"><span class="labelProfile">Birthday:</span> <span class="valueProfile">${birthday}</span></li>
-                            <li id="createdProfile"><span class="labelProfile">Created:</span> <span class="valueProfile">${created_at}</span></li>
-                            <li id="updatedProfile"><span class="labelProfile">Updated:</span> <span class="valueProfile">${updated_at}</span></li>
+                            <li id="createdProfile"><span class="labelProfile">Created:</span> <span class="valueProfile">${cr_at}</span></li>
+                            <li id="updatedProfile"><span class="labelProfile">Updated:</span> <span class="valueProfile">${up_at}</span></li>
+                            <div class="profileBtns">
+                                <button>Update</button>
+                                <button>Delete</button>
+                                <button>Message</button>
+                            </div>
                         </ul>
                     </p>
                 </div>
             </div>`;
+}
+
+function markupUpdateProfile(data) {
+    const {
+        name,
+        surname,
+        email,
+        phone,
+        birthday,
+        created_at,
+        updated_at
+    } = data;
+
+    const tel = phone.replace( /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, 
+        '$1-$2-$3-$4-$5' )
+    
+    const cr_at = created_at.split('.')[0]
+    const up_at = updated_at.split('.')[0]
+    
+    return `<div class="profile-content">
+                <span class="close" id="registerClose">&times;</span>
+                <h2 class="profile-title">Update Contact</h2>
+                <form class="contact-form">
+                    <label for="contactName">Name:</label>
+                    <input type="name" id="contactName" name="name" required value=${name}>
+                    <label for="contactSurname">Surname:</label>
+                    <input type="surname" id="contactSurname" name="surname" required value=${surname}>
+                    <label for="contactEmail">Email:</label>
+                    <input type="email" id="contactEmail" name="email" required value=${email}>
+                    <label for="contactPhone">Phone:</label>
+                    <input type="tel" id="contactPhone" name="phone" required value=${tel} pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}" placeholder="123-45-678-90-00">
+                    <label for="contactBirthday">Birthday:</label>
+                    <input type="date" id="contactBirthday" name="birthday" required value=${birthday}>
+                    <label for="createdAt">Created at:</label>
+                    <input disabled type="datetime-local" id="createdAt" name="created" required value=${cr_at}>
+                    <label for="updatedAt">Updated at:</label>
+                    <input disabled type="datetime-local" id="createdAt" name="updated" required value=${up_at}>
+                    </label>
+                    <button class="upd-btn" type="submit">Save</button>
+                </form>
+            </div>`
 }
 
 export {
@@ -102,4 +155,5 @@ export {
     markupModalEvent,
     murkupContacts,
     marcupCard,
+    markupUpdateProfile
 };

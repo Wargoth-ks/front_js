@@ -4,15 +4,19 @@ import {
     getUsers,
     postSignUp,
     getUserProfile,
+    deleteContact,
+    updateContact,
 } from './partials/requests';
+
 import {
     markupModalEvent,
     markupModalLogin,
     markupModalReg,
     marcupCard,
+    markupUpdateProfile,
 } from './partials/markup';
 
-import { blinkAnim, iterOneAnim } from './partials/anim';
+import { blinkAnim, iterOneAnim, animCard } from './partials/anim';
 
 // Menu after login
 const menuToggle = document.querySelector('.menu');
@@ -57,11 +61,9 @@ btns.forEach((btn, index) => {
         switch (index) {
             case 0:
                 modal.insertAdjacentHTML('afterbegin', markupModalLogin);
-                // animModal(modal); // !!! <- change this
                 break;
             case 1:
                 modal.insertAdjacentHTML('afterbegin', markupModalReg);
-                // animModal(modal); // !!! <- change this
                 onCheckBox();
                 break;
             default:
@@ -69,7 +71,6 @@ btns.forEach((btn, index) => {
         }
 
         modal.firstChild.classList.add('modal-anim');
-        modal.style.background = 'none';
 
         iterOneAnim(modal);
         blinkAnim(modal);
@@ -78,10 +79,6 @@ btns.forEach((btn, index) => {
         onCloseEscModal(modal);
     });
 });
-
-// function animModal(elem) { // !!! <- change this
-//     elem.firstChild.classList.add('modal-anim');
-// }
 
 function onCheckBox() {
     document
@@ -109,7 +106,6 @@ function onCloseEscModal(modal) {
 }
 
 function closeModalHandler(modal) {
-    marcupCard;
     modal.classList.remove('modal-show');
     modal.innerHTML = '';
 }
@@ -211,29 +207,79 @@ async function searchUsers() {
 searchUsers();
 
 async function contactProfile(listCards, data) {
-    let cardProfile = document.querySelector('.cardProfile');
+    const cardProfile = document.querySelector('.cardProfile');
 
     [...listCards.children].forEach((card, index) => {
         card.addEventListener('click', async e => {
             await e.preventDefault();
-            // console.dir("Dataset: ", card);
-            // console.dir("Target:", data[index]);
+
             if (e.target == card.children[2].children[0]) {
+                // console.dir('Card: ', listCards.children);
+                // console.dir('Target: ', e.target);
                 cardProfile.insertAdjacentHTML(
                     'afterbegin',
                     marcupCard(data[index])
                 );
-                cardProfile.classList.add('cardShow');
+                cardProfile.classList.add('modal-show');
+                await animCard(cardProfile);
 
-                let btnProfile = document.querySelector('.profileButton');
+                const btnCard = document.querySelector('.profileBtns');
 
-                btnProfile.addEventListener('click', async e => {
+                btnCard.addEventListener('click', async function (e) {
                     e.preventDefault();
-                    cardProfile.classList.remove('cardShow');
-                    cardProfile.innerHTML = '';
+                    // console.dir(e.target);
+                    if (e.target.textContent == 'Delete') {
+                        await deleteContact(
+                            data[index].id,
+                            cardProfile,
+                            index,
+                            listCards
+                        );
+                    } else if (e.target.textContent == 'Update') {
+                        // console.dir('True');
+                        await updateProfile(data[index], cardProfile);
+                    }
                 });
+                await closeProfile(cardProfile);
             }
         });
+    });
+}
+
+async function updateProfile(body, card) {
+    const updProfile = document.querySelector('.update-profile');
+
+    updProfile.classList.add('modal-show');
+    updProfile.insertAdjacentHTML('afterbegin', markupUpdateProfile(body));
+
+    closeModalHandler(card);
+
+    const formUpd = document.querySelector('.contact-form');
+    formUpd.addEventListener('submit', async e => {
+        e.preventDefault();
+        // console.dir(body.id, e.target.name.value);
+        const { name, surname, email, phone, birthday } = e.target;
+        await updateContact(body.id, {
+            name: name.value,
+            surname: surname.value,
+            email: email.value,
+            phone: phone.value.replaceAll('-', ''),
+            birthday: birthday.value,
+        });
+        closeModalHandler(updProfile);
+        getUsers();
+    });
+
+    onCloseClickModal(updProfile);
+    onCloseEscModal(updProfile);
+}
+
+async function closeProfile(card) {
+    let btnProfile = document.querySelector('.cancelButton');
+
+    btnProfile.addEventListener('click', async e => {
+        e.preventDefault();
+        closeModalHandler(card);
     });
 }
 
@@ -253,4 +299,4 @@ function eventModal(name, text, color, addtext) {
     });
 }
 
-export { eventModal, iterOneAnim, blinkAnim, scaleAnimList, contactProfile };
+export { eventModal, iterOneAnim, blinkAnim, contactProfile };

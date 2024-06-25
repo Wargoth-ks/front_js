@@ -203,15 +203,14 @@ async function getUsers() {
             },
         })
         .then(response => {
-
             let listData = document.querySelector('.listContacts');
-            listData.innerHTML = ''
+            listData.innerHTML = '';
             listData.insertAdjacentHTML(
                 'afterbegin',
                 murkupContacts(response.data)
             );
-            scaleAnimList([...listData.children])
-            contactProfile(listData, response.data)
+            scaleAnimList([...listData.children]);
+            contactProfile(listData, response.data);
             console.log(response.data, response.data.length);
         })
         .catch(error => {
@@ -245,6 +244,33 @@ async function getUserProfile() {
         });
 }
 
+async function deleteContact(id, profile, index, list) {
+    return await axiosInstance
+        .delete(`/contacts/${id}`)
+        .then(response => {
+
+            profile.classList.remove('modal-show');
+            profile.innerHTML = '';
+            list.removeChild(list.childNodes[index])
+            getUsers()
+            console.dir(response);
+        })
+        .catch(error => {
+            console.dir(error);
+        });
+}
+
+async function updateContact(id, body) {
+    return await axiosInstance
+        .put(`/contacts/${id}`, body)
+        .then(response => {
+            console.dir(response);
+        })
+        .catch(error => {
+            console.dir(error);
+        })
+}
+
 export {
     getStatusServer,
     postLoginUser,
@@ -252,4 +278,6 @@ export {
     postSignUp,
     getUsers,
     getUserProfile,
+    deleteContact,
+    updateContact
 };

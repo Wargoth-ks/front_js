@@ -1,4 +1,6 @@
 async function iterOneAnim(elem) {
+    elem.style.background = 'none';
+
     await elem.animate(
         {
             opacity: [0, 1],
@@ -11,10 +13,8 @@ async function iterOneAnim(elem) {
         }
     );
     setTimeout(() => {
-        elem.style.background = 'rgba(0, 0, 0, 0.4)';
+        elem.style.background = 'rgba(0, 0, 0, 0.3)';
     }, 301);
-
-    // console.dir('Modals: ', elem);
 }
 
 async function blinkAnim(elem) {
@@ -89,4 +89,23 @@ async function scaleAnimList(elems) {
     }
 }
 
-export {iterOneAnim, blinkAnim, scaleAnimList}
+async function animCard(card) {
+    card.style.background = 'none';
+
+    await card.animate(
+        {
+            transform: ['scale(0)', 'scale(1)'],
+            opacity: [0, 1],
+        },
+        {
+            fill: 'both',
+            duration: 300,
+            iteration: 1,
+        }
+    );
+    setTimeout(() => {
+        card.style.background = 'rgba(0, 0, 0, 0.7)';
+    }, 302);
+}
+
+export { iterOneAnim, blinkAnim, scaleAnimList, animCard };
