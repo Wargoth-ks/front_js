@@ -68,64 +68,75 @@
 
       <!-- Navigation Bar -->
       <nav class="js-list">
-        <ul>
-          <li>
-            <a href="/"><svg style="height: 23px; display: block; float: left; margin-right: 7px;"
-                xmlns="http://www.w3.org/2000/svg" width="23" height="35" viewBox="0 0 24 24" fill="none"
-                stroke="#ffffff" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="arcs">
-                <path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9" />
-                <path d="M9 22V12h6v10M2 10.6L12 2l10 8.6" />
-              </svg>Home</a>
+        <ul class="jsListItems">
+          <li class="jsChat">
+            <a id="aChat" href="/chat">
+              <button>
+                Hello
+              </button>
+            </a>
           </li>
-          <li>
-            <button class="js-btns" id="loginBtn"><svg
-                style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg"
-                width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"
-                stroke-linecap="butt" stroke-linejoin="bevel">
-                <path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3" />
-              </svg>Login</button>
+          <li class="jsLog">
+            <a id="aLog" href="/login">
+              <button class="js-btns" id="loginBtn"><svg
+                  style="height: 23px; display: block; float: left; margin-right: 7px;"
+                  xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="#ffffff" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="bevel">
+                  <path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3" />
+                </svg>Login</button>
+            </a>
           </li>
-          <li>
-            <button class="js-btns" id="registerBtn"><svg
-                style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg"
-                width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2"
-                stroke-linecap="butt" stroke-linejoin="bevel">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="8.5" cy="7" r="4"></circle>
-                <line x1="20" y1="8" x2="20" y2="14"></line>
-                <line x1="23" y1="11" x2="17" y2="11"></line>
-              </svg>Sign up</button>
+          <li class="jsReg">
+            <a id="aReg" href="/signup">
+              <button class="js-btns" id="registerBtn"><svg
+                  style="height: 23px; display: block; float: left; margin-right: 7px;"
+                  xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="#ffffff" stroke-width="2.2" stroke-linecap="butt" stroke-linejoin="bevel">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>Sign up</button>
+            </a>
           </li>
         </ul>
       </nav>
     </div>
   </header>
+  <main>
+    <div class="loadPage">
+      <span class="loader">
+      </span>
+      <div class="loadText">
+        Loading...
+      </div>
+    </div>
+    <!-- Contacts -->
+    <div class="contacts">
+      <ul class="listContacts">
+      </ul>
+    </div>
 
-  <!-- Contacts -->
-  <div class="contacts">
-    <ul class="listContacts">
-    </ul>
-  </div>
-  
-  <!-- Card Profile -->
-  <div class="cardProfile">
-  </div>
-  
-  <div class="update-profile">
-  </div>
+    <!-- Card Profile -->
+    <div class="cardProfile">
+    </div>
 
-  <!-- Login Modal -->
-  <div id="loginModal" class="modal">
-  </div>
+    <!-- Update Profile -->
+    <div class="update-profile">
+    </div>
 
-  <!-- Register Modal -->
-  <div id="registerModal" class="modal">
-  </div>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+    </div>
 
-  <!-- Event Modal -->
-  <div class="eventModal">
-  </div>
-  
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+    </div>
+
+    <!-- Event Modal -->
+    <div class="eventModal">
+    </div>
+  </main>
   <!-- Footer -->
   <footer>
     <div class="container">

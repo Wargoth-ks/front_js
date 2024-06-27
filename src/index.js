@@ -17,6 +17,7 @@ import {
 } from './partials/markup';
 
 import { blinkAnim, iterOneAnim, animCard } from './partials/anim';
+import { cleanContent, cleanIfAuthorized } from './partials/clean';
 
 // Menu after login
 const menuToggle = document.querySelector('.menu');
@@ -28,6 +29,42 @@ const modals = document.querySelectorAll('.modal');
 // const jsList = document.querySelector('.js-list')
 const jsbtn = document.querySelector('.js-button-search');
 
+function loadingPage() {
+    window.addEventListener('DOMContentLoaded', function () {
+        toggleLoader();
+    });
+
+    
+    window.addEventListener('load', function () {
+        document.readyState === 'complete'
+        ? setTimeout(() => toggleLoader(), 2000)
+        : document.addEventListener('readystatechange', () => {
+            if (document.readyState === 'complete') {
+                setTimeout(() => toggleLoader(), 2000);
+            }
+        });
+    });
+}
+
+loadingPage();
+
+function navItemsLoad() {
+    const reg = document.querySelector('.jsListItems');
+    reg.style.opacity = 1;
+}
+
+setTimeout(navItemsLoad, 2000)
+
+function toggleLoader() {
+    const loader = document.querySelector('.loadPage').classList;
+
+    if (loader.contains('modal-show')) {
+        loader.remove('modal-show');
+    } else {
+        loader.add('modal-show');
+    }
+}
+
 async function menuShowHide() {
     // const avatar = document.querySelector('#menu-avatar');
 
@@ -35,8 +72,8 @@ async function menuShowHide() {
     menuBtn.style.opacity = 1;
 
     if (div.classList.contains('menu-active')) {
-        let user = await getUserProfile();
-        document.querySelector('#menu-avatar').src = user;
+        let avatar = await getUserProfile();
+        document.querySelector('#menu-avatar').src = avatar;
         menuBtn.style.opacity = 0;
     }
 }
@@ -50,35 +87,39 @@ function mainMenu() {
 
 mainMenu();
 
-btns.forEach((btn, index) => {
-    let modal = modals[index];
+function initialModals() {
+    btns.forEach((btn, index) => {
+        let modal = modals[index];
 
-    btn.addEventListener('click', e => {
-        e.preventDefault();
+        btn.addEventListener('click', e => {
+            e.preventDefault();
 
-        modal.classList.add('modal-show');
+            modal.classList.add('modal-show');
 
-        switch (index) {
-            case 0:
-                modal.insertAdjacentHTML('afterbegin', markupModalLogin);
-                break;
-            case 1:
-                modal.insertAdjacentHTML('afterbegin', markupModalReg);
-                onCheckBox();
-                break;
-            default:
-                console.dir(index);
-        }
+            switch (index) {
+                case 0:
+                    modal.insertAdjacentHTML('afterbegin', markupModalLogin);
+                    break;
+                case 1:
+                    modal.insertAdjacentHTML('afterbegin', markupModalReg);
+                    onCheckBox();
+                    break;
+                default:
+                    console.dir(index);
+            }
 
-        modal.firstChild.classList.add('modal-anim');
+            modal.firstChild.classList.add('modal-anim');
 
-        iterOneAnim(modal);
-        blinkAnim(modal);
+            iterOneAnim(modal);
+            blinkAnim(modal);
 
-        onCloseClickModal(modal);
-        onCloseEscModal(modal);
+            onCloseClickModal(modal);
+            onCloseEscModal(modal);
+        });
     });
-});
+}
+
+initialModals();
 
 function onCheckBox() {
     document
@@ -107,22 +148,25 @@ function onCloseEscModal(modal) {
 
 function closeModalHandler(modal) {
     modal.classList.remove('modal-show');
+    // modal.style.display = 'none';
     modal.innerHTML = '';
 }
 
 function loginData() {
-    const loginBtn = document.querySelector('#loginBtn');
+    const loginBtn = document.querySelector('#aLog');
     // console.dir(formData);
 
-    loginBtn.addEventListener('click', () => {
+    loginBtn.addEventListener('click', e => {
         console.dir('Open login form');
+        e.preventDefault();
         const sendForm = document.querySelector('.form');
         const sndBtn = sendForm.lastElementChild;
         const closeElement = sendForm.parentNode.parentElement;
 
-        // console.dir(sndBtn);
         sendForm.addEventListener('submit', async data => {
             data.preventDefault();
+            sndBtn.style.background = 'black';
+            toggleLoader();
             const {
                 target: { email, password },
             } = data;
@@ -132,11 +176,12 @@ function loginData() {
             };
             // console.dir(sendForm.lastElementChild);
             await postLoginUser(sendData);
-
+            cleanIfAuthorized();
             sndBtn.setAttribute('disabled', '');
             email.disabled = true;
             password.disabled = true;
-            setTimeout(closeModalHandler, 3000, closeElement);
+            setTimeout(closeModalHandler, 2000, closeElement);
+            toggleLoader();
         });
         // sendForm.lastElementChild.setAttribute('disabled', "")
     });
@@ -150,15 +195,18 @@ function logoutUser() {
     logout.addEventListener('click', async e => {
         e.preventDefault();
         await postLogoutUser();
+        menuShowHide();
+        cleanContent();
     });
 }
 
 logoutUser();
 
 function signupData() {
-    const regBtn = document.querySelector('#registerBtn');
+    const regBtn = document.querySelector('#aReg');
 
     regBtn.addEventListener('click', e => {
+        e.preventDefault();
         console.dir('Open reg form');
         const sendRegForm = document.querySelector('#fileImg');
         const sndBtn = sendRegForm.lastElementChild;
@@ -295,8 +343,9 @@ function eventModal(name, text, color, addtext) {
     const eBtn = document.querySelector('.eBtn');
     eBtn.addEventListener('click', e => {
         e.preventDefault();
+        eventModal.style.display = 'none';
         closeModalHandler(eventModal);
     });
 }
 
-export { eventModal, iterOneAnim, blinkAnim, contactProfile };
+export { menuShowHide, eventModal, iterOneAnim, blinkAnim, contactProfile };

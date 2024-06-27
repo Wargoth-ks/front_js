@@ -1,6 +1,10 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { contactProfile, eventModal } from '..';
+import {
+    contactProfile,
+    eventModal,
+    menuShowHide,
+} from '..';
 import {
     messConfirm,
     messNotFound,
@@ -11,6 +15,7 @@ import {
 import { scaleAnimList } from './anim.js';
 
 import { murkupContacts } from './markup.js';
+import { cleanIfAuthorized } from './clean.js';
 
 // let BASE_URL = 'http://0.0.0.0:8000/api';
 const BASE_URL = process.env.URL;
@@ -88,7 +93,12 @@ async function getStatusServer() {
     return await axiosInstance
         .get('/healthchecker')
         .then(response => {
-            console.log(response.status);
+            if (response.data.message == 'Cookie accepted') {
+                console.dir('User is authorized');
+                cleanIfAuthorized()
+            } else {
+                console.log(response);
+            }
         })
         .catch(internalErr => {
             console.log(internalErr.status);
@@ -156,7 +166,7 @@ async function postLoginUser(data) {
         .then(response => {
             console.dir(response.data);
             eventModal(...messLogOk);
-            reloadWithTimeout();
+            // reloadWithTimeout();
         })
         .catch(error => {
             console.log('Login error:', error.response);
@@ -177,8 +187,6 @@ async function postLoginUser(data) {
                     );
             }
         });
-
-    // return Promise.reject(error);
 }
 
 async function postLogoutUser() {
@@ -186,8 +194,8 @@ async function postLogoutUser() {
         .get('/auth/logout')
         .then(response => {
             console.log(response.data);
-            eventModal('Success!', `${response.data}`, 'green');
-            reloadWithTimeout();
+            eventModal('Success!', `${response.data}`, 'cyan');
+            // reloadWithTimeout();
         })
         .catch(error => {
             console.log(error);
@@ -240,7 +248,8 @@ async function getUserProfile() {
                 ...messUnAuth,
                 msg.charAt(0).toUpperCase() + msg.slice(1)
             );
-            reloadWithTimeout();
+            // reloadWithTimeout();
+            setTimeout(menuShowHide, 300);
         });
 }
 
@@ -248,11 +257,10 @@ async function deleteContact(id, profile, index, list) {
     return await axiosInstance
         .delete(`/contacts/${id}`)
         .then(response => {
-
             profile.classList.remove('modal-show');
             profile.innerHTML = '';
-            list.removeChild(list.childNodes[index])
-            getUsers()
+            list.removeChild(list.childNodes[index]);
+            getUsers();
             console.dir(response);
         })
         .catch(error => {
@@ -268,7 +276,7 @@ async function updateContact(id, body) {
         })
         .catch(error => {
             console.dir(error);
-        })
+        });
 }
 
 export {
@@ -279,5 +287,5 @@ export {
     getUsers,
     getUserProfile,
     deleteContact,
-    updateContact
+    updateContact,
 };

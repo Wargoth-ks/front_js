@@ -25,6 +25,6 @@ const messUnAuth = [
     'Please, logIn !',
 ];
 
-const messLogOk = ['Success', 'Welcome, friend!!!', 'green'];
+const messLogOk = ['Success', 'Welcome, friend!!!', 'cyan'];
 
 export { messConfirm, messNotFound, messOtherError, messUnAuth, messLogOk };
