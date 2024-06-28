@@ -4,6 +4,8 @@ import {
     contactProfile,
     eventModal,
     menuShowHide,
+    authUser,
+    searchUsers
 } from '..';
 import {
     messConfirm,
@@ -96,6 +98,8 @@ async function getStatusServer() {
             if (response.data.message == 'Cookie accepted') {
                 console.dir('User is authorized');
                 cleanIfAuthorized()
+                authUser()
+                searchUsers()
             } else {
                 console.log(response);
             }

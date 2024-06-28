@@ -74,11 +74,13 @@ function marcupCard(card) {
         updated_at,
     } = card;
 
-    const tel = phone.replace( /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, 
-        '$1-$2-$3-$4-$5' )
-    
-    const cr_at = created_at.split('.')[0]
-    const up_at = updated_at.split('.')[0]
+    const tel = phone.replace(
+        /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/,
+        '$1-$2-$3-$4-$5'
+    );
+
+    const cr_at = created_at.split('.')[0];
+    const up_at = updated_at.split('.')[0];
 
     return `<div class="profileContact">
                 <div class="imgProfile">
@@ -109,22 +111,17 @@ function marcupCard(card) {
 }
 
 function markupUpdateProfile(data) {
-    const {
-        name,
-        surname,
-        email,
-        phone,
-        birthday,
-        created_at,
-        updated_at
-    } = data;
+    const { name, surname, email, phone, birthday, created_at, updated_at } =
+        data;
 
-    const tel = phone.replace( /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, 
-        '$1-$2-$3-$4-$5' )
-    
-    const cr_at = created_at.split('.')[0]
-    const up_at = updated_at.split('.')[0]
-    
+    const tel = phone.replace(
+        /(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/,
+        '$1-$2-$3-$4-$5'
+    );
+
+    const cr_at = created_at.split('.')[0];
+    const up_at = updated_at.split('.')[0];
+
     return `<div class="profile-content">
                 <span class="close" id="registerClose">&times;</span>
                 <h2 class="profile-title">Update Contact</h2>
@@ -146,7 +143,44 @@ function markupUpdateProfile(data) {
                     </label>
                     <button class="upd-btn" type="submit">Save</button>
                 </form>
-            </div>`
+            </div>`;
+}
+
+function markupNavbarItems() {
+    return `
+        <li class="jsMenu">
+            <form class="form-menu">
+            <input id="form-search-input" class="form-input" autocomplete="off" type="search" name="search"
+                placeholder="Search">
+            <select id="form-search-select" name="search-options" placeholder="">
+                <option value="1">All</option>
+                <option value="2">By name</option>
+                <option value="3">By age</option>
+                <option value="4">By birthday</option>
+            </select>
+            <button type="button" class="js-button-search">
+            <svg style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Magnifying-Glass--Streamline-Sharp-Remix" height="24" width="24"><desc>Magnifying Glass Streamline Icon: https://streamlinehq.com</desc><g id="Remix/Interface Essential/magnifying-glass--glass-search-magnifying"><path id="Union" fill="#ffffff" fill-rule="evenodd" d="M11 0C8.08262 0 5.28473 1.15893 3.22183 3.22183S0 8.08262 0 11c0 2.9174 1.15893 5.7153 3.22183 7.7782S8.08262 22 11 22c2.3275 0 4.579 -0.7377 6.4419 -2.0835L21.5254 24l2.4749 -2.4748 -4.0836 -4.0836C21.2624 15.5788 22 13.3274 22 11c0 -2.91738 -1.1589 -5.71527 -3.2218 -7.77817S13.9174 0 11 0ZM4.98959 4.98959C6.58365 3.39553 8.74566 2.5 11 2.5c2.2543 0 4.4163 0.89553 6.0104 2.48959C18.6045 6.58365 19.5 8.74566 19.5 11c0 2.2543 -0.8955 4.4163 -2.4896 6.0104C15.4163 18.6045 13.2543 19.5 11 19.5c-2.25434 0 -4.41635 -0.8955 -6.01041 -2.4896C3.39553 15.4163 2.5 13.2543 2.5 11c0 -2.25434 0.89553 -4.41635 2.48959 -6.01041Z" clip-rule="evenodd" stroke-width="1"></path></g></svg>
+                Go!
+            </button>
+            </form>
+        </li>
+        <li class="jsChat">
+            <a id="aChat" href="/chat">
+            <button>
+            <svg style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                Chat
+            </button>
+            </a>
+        </li>
+        <li class="jsInbox">
+            <a id="aBox" href="/inbox">
+            <button>
+            <svg style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Mail-Send-Envelope--Streamline-Sharp" height="24" width="24"><desc>Mail Send Envelope Streamline Icon: https://streamlinehq.com</desc><g id="mail-send-envelope--envelope-email-message-unopened-sealed-close"><path id="Rectangle 846" fill="#0000001f" d="M1.0605 3.2484H22.9395V20.7516H1.0605Z" stroke-width="1.5"></path><path id="Rectangle 847" stroke="#ffffff" d="M1.0605 3.2484H22.9395V20.7516H1.0605Z" stroke-width="1.5"></path><path id="Vector 2539" stroke="#ffffff" d="M1.0605 6.5302L12 13.0939L22.9395 6.5302" stroke-width="1.5"></path></g></svg>
+                Messages
+            </button>
+            </a>
+        </li>
+    `;
 }
 
 export {
@@ -155,5 +189,6 @@ export {
     markupModalEvent,
     murkupContacts,
     marcupCard,
-    markupUpdateProfile
+    markupUpdateProfile,
+    markupNavbarItems,
 };

@@ -14,6 +14,7 @@ import {
     markupModalReg,
     marcupCard,
     markupUpdateProfile,
+    markupNavbarItems,
 } from './partials/markup';
 
 import { blinkAnim, iterOneAnim, animCard } from './partials/anim';
@@ -27,22 +28,20 @@ const div = document.querySelector('div.menu');
 const btns = document.querySelectorAll('.js-btns');
 const modals = document.querySelectorAll('.modal');
 // const jsList = document.querySelector('.js-list')
-const jsbtn = document.querySelector('.js-button-search');
 
 function loadingPage() {
     window.addEventListener('DOMContentLoaded', function () {
         toggleLoader();
     });
 
-    
     window.addEventListener('load', function () {
         document.readyState === 'complete'
-        ? setTimeout(() => toggleLoader(), 2000)
-        : document.addEventListener('readystatechange', () => {
-            if (document.readyState === 'complete') {
-                setTimeout(() => toggleLoader(), 2000);
-            }
-        });
+            ? setTimeout(() => toggleLoader(), 2000)
+            : document.addEventListener('readystatechange', () => {
+                  if (document.readyState === 'complete') {
+                      setTimeout(() => toggleLoader(), 2000);
+                  }
+              });
     });
 }
 
@@ -53,7 +52,7 @@ function navItemsLoad() {
     reg.style.opacity = 1;
 }
 
-setTimeout(navItemsLoad, 2000)
+setTimeout(navItemsLoad, 2000);
 
 function toggleLoader() {
     const loader = document.querySelector('.loadPage').classList;
@@ -63,6 +62,11 @@ function toggleLoader() {
     } else {
         loader.add('modal-show');
     }
+}
+
+async function authUser() {
+    const items = document.querySelector('.jsListItems');
+    items.insertAdjacentHTML('afterbegin', markupNavbarItems());
 }
 
 async function menuShowHide() {
@@ -180,8 +184,11 @@ function loginData() {
             sndBtn.setAttribute('disabled', '');
             email.disabled = true;
             password.disabled = true;
+
             setTimeout(closeModalHandler, 2000, closeElement);
             toggleLoader();
+            authUser();
+            searchUsers()
         });
         // sendForm.lastElementChild.setAttribute('disabled', "")
     });
@@ -245,14 +252,13 @@ function signupData() {
 signupData();
 
 async function searchUsers() {
+    let jsbtn = document.querySelector('.js-button-search');
     jsbtn.addEventListener('click', async e => {
         e.preventDefault();
         console.dir('Search users');
         await getUsers();
     });
 }
-
-searchUsers();
 
 async function contactProfile(listCards, data) {
     const cardProfile = document.querySelector('.cardProfile');
@@ -348,4 +354,12 @@ function eventModal(name, text, color, addtext) {
     });
 }
 
-export { menuShowHide, eventModal, iterOneAnim, blinkAnim, contactProfile };
+export {
+    authUser,
+    searchUsers,
+    menuShowHide,
+    eventModal,
+    iterOneAnim,
+    blinkAnim,
+    contactProfile,
+};
