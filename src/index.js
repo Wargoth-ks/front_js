@@ -22,7 +22,7 @@ import { cleanContent, cleanIfAuthorized } from './partials/clean';
 
 // Menu after login
 const menuToggle = document.querySelector('.menu');
-const menuBtn = document.querySelector('.menu-btn');
+const menuBtn = document.querySelector('.menuLinkBtn');
 const div = document.querySelector('div.menu');
 
 const btns = document.querySelectorAll('.js-btns');
@@ -188,7 +188,7 @@ function loginData() {
             setTimeout(closeModalHandler, 2000, closeElement);
             toggleLoader();
             authUser();
-            searchUsers()
+            searchUsers();
         });
         // sendForm.lastElementChild.setAttribute('disabled', "")
     });
@@ -252,11 +252,42 @@ function signupData() {
 signupData();
 
 async function searchUsers() {
-    let jsbtn = document.querySelector('.js-button-search');
-    jsbtn.addEventListener('click', async e => {
+    const formSearch = document.querySelector('.form-menu');
+    const searchSelect = document.querySelector('#form-search-select');
+    const searchInput = document.querySelector('#form-search-input');
+
+    searchSelect.addEventListener('change', function () {
+        const selectedOption = this.selectedOptions[0].text.toLowerCase();
+        if (selectedOption === 'birthday') {
+            searchInput.setAttribute('type', 'date');
+        } else {
+            searchInput.setAttribute('type', 'text');
+        }
+    });
+
+    formSearch.addEventListener('submit', async e => {
         e.preventDefault();
-        console.dir('Search users');
-        await getUsers();
+        const qValue = e.target[0].value.trim();
+        const qValueUp = qValue.charAt(0).toUpperCase() + qValue.slice(1);
+        const selectedOption =
+            searchSelect.selectedOptions[0].text.toLowerCase();
+
+        if (selectedOption === 'birthday') {
+            await getUsers(`?${selectedOption}=${e.target[0].value}`);
+        } else {
+            if (selectedOption === 'name' || selectedOption === 'surname') {
+                await getUsers(`?${selectedOption}=${qValueUp}`);
+            } else {
+                await getUsers(`?${selectedOption}=${qValue}`);
+            }
+        }
+        searchInput.value = '';
+
+        if (searchInput.type == 'date') {
+            searchInput.setAttribute('type', 'text');
+            searchInput.value = '';
+        }
+        formSearch.reset();
     });
 }
 

@@ -207,9 +207,9 @@ async function postLogoutUser() {
         });
 }
 
-async function getUsers() {
+async function getUsers(query) {
     return await axiosInstance
-        .get('/contacts/search', {
+        .get(`/contacts/search${query}`, {
             headers: {
                 Accept: 'application/json',
             },

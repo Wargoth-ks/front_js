@@ -150,18 +150,19 @@ function markupNavbarItems() {
     return `
         <li class="jsMenu">
             <form class="form-menu">
-            <input id="form-search-input" class="form-input" autocomplete="off" type="search" name="search"
-                placeholder="Search">
-            <select id="form-search-select" name="search-options" placeholder="">
-                <option value="1">All</option>
-                <option value="2">By name</option>
-                <option value="3">By age</option>
-                <option value="4">By birthday</option>
-            </select>
-            <button type="button" class="js-button-search">
-            <svg style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Magnifying-Glass--Streamline-Sharp-Remix" height="24" width="24"><desc>Magnifying Glass Streamline Icon: https://streamlinehq.com</desc><g id="Remix/Interface Essential/magnifying-glass--glass-search-magnifying"><path id="Union" fill="#ffffff" fill-rule="evenodd" d="M11 0C8.08262 0 5.28473 1.15893 3.22183 3.22183S0 8.08262 0 11c0 2.9174 1.15893 5.7153 3.22183 7.7782S8.08262 22 11 22c2.3275 0 4.579 -0.7377 6.4419 -2.0835L21.5254 24l2.4749 -2.4748 -4.0836 -4.0836C21.2624 15.5788 22 13.3274 22 11c0 -2.91738 -1.1589 -5.71527 -3.2218 -7.77817S13.9174 0 11 0ZM4.98959 4.98959C6.58365 3.39553 8.74566 2.5 11 2.5c2.2543 0 4.4163 0.89553 6.0104 2.48959C18.6045 6.58365 19.5 8.74566 19.5 11c0 2.2543 -0.8955 4.4163 -2.4896 6.0104C15.4163 18.6045 13.2543 19.5 11 19.5c-2.25434 0 -4.41635 -0.8955 -6.01041 -2.4896C3.39553 15.4163 2.5 13.2543 2.5 11c0 -2.25434 0.89553 -4.41635 2.48959 -6.01041Z" clip-rule="evenodd" stroke-width="1"></path></g></svg>
-                Go!
-            </button>
+                <input id="form-search-input" class="form-input" autocomplete="off" placeholder="Search">
+                <select id="form-search-select" type="text" placeholder="">
+                    <option value="1">All</option>
+                    <option value="2">Name</option>
+                    <option value="3">Surname</option>
+                    <option value="4">Email</option>
+                    <option value="5">Phone</option>
+                    <option value="6">Birthday</option>
+                </select>
+                <button type="submit" class="js-button-search">
+                <svg style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Magnifying-Glass--Streamline-Sharp-Remix" height="24" width="24"><desc>Magnifying Glass Streamline Icon: https://streamlinehq.com</desc><g id="Remix/Interface Essential/magnifying-glass--glass-search-magnifying"><path id="Union" fill="#ffffff" fill-rule="evenodd" d="M11 0C8.08262 0 5.28473 1.15893 3.22183 3.22183S0 8.08262 0 11c0 2.9174 1.15893 5.7153 3.22183 7.7782S8.08262 22 11 22c2.3275 0 4.579 -0.7377 6.4419 -2.0835L21.5254 24l2.4749 -2.4748 -4.0836 -4.0836C21.2624 15.5788 22 13.3274 22 11c0 -2.91738 -1.1589 -5.71527 -3.2218 -7.77817S13.9174 0 11 0ZM4.98959 4.98959C6.58365 3.39553 8.74566 2.5 11 2.5c2.2543 0 4.4163 0.89553 6.0104 2.48959C18.6045 6.58365 19.5 8.74566 19.5 11c0 2.2543 -0.8955 4.4163 -2.4896 6.0104C15.4163 18.6045 13.2543 19.5 11 19.5c-2.25434 0 -4.41635 -0.8955 -6.01041 -2.4896C3.39553 15.4163 2.5 13.2543 2.5 11c0 -2.25434 0.89553 -4.41635 2.48959 -6.01041Z" clip-rule="evenodd" stroke-width="1"></path></g></svg>
+                    Go!
+                </button>
             </form>
         </li>
         <li class="jsChat">
