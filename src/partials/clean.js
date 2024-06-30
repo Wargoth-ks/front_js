@@ -18,7 +18,8 @@ export const cleanContent = () => {
         if (
             child.className == 'jsMenu' ||
             child.className == 'jsChat' ||
-            child.className == 'jsInbox'
+            child.className == 'jsInbox' ||
+            child.className == 'jsAdd'
         ) {
             parent.removeChild(child);
         }

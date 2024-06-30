@@ -5,7 +5,8 @@ import {
     eventModal,
     menuShowHide,
     authUser,
-    searchUsers
+    searchContacts,
+    addContact,
 } from '..';
 import {
     messConfirm,
@@ -29,6 +30,8 @@ const axiosInstance = axios.create({
         Accept: 'application/json',
     },
     withCredentials: true,
+    // timeout: 10000,
+    // signal: AbortSignal.timeout(10000)
 });
 
 axiosRetry(axiosInstance, {
@@ -97,9 +100,10 @@ async function getStatusServer() {
         .then(response => {
             if (response.data.message == 'Cookie accepted') {
                 console.dir('User is authorized');
-                cleanIfAuthorized()
-                authUser()
-                searchUsers()
+                cleanIfAuthorized();
+                authUser();
+                addContact();
+                searchContacts();
             } else {
                 console.log(response);
             }
@@ -207,7 +211,7 @@ async function postLogoutUser() {
         });
 }
 
-async function getUsers(query) {
+async function getContacts(query) {
     return await axiosInstance
         .get(`/contacts/search${query}`, {
             headers: {
@@ -224,11 +228,20 @@ async function getUsers(query) {
             scaleAnimList([...listData.children]);
             contactProfile(listData, response.data);
             console.log(response.data, response.data.length);
+            if (response.data.length == 0) {
+                eventModal('Search result', 'Not found', 'cyan');
+            }
         })
         .catch(error => {
-            if (error) {
+            if (error.response && error.response.status == 400) {
                 console.dir(error);
-                eventModal(...messUnAuth);
+                let msg = `${error.response.data.Detail[0].msg}`;
+                eventModal(
+                    ...messOtherError,
+                    msg.charAt(0).toUpperCase() + msg.slice(1)
+                );
+            } else {
+                eventModal(...messOtherError);
             }
         });
 }
@@ -264,7 +277,7 @@ async function deleteContact(id, profile, index, list) {
             profile.classList.remove('modal-show');
             profile.innerHTML = '';
             list.removeChild(list.childNodes[index]);
-            getUsers();
+            getContacts('');
             console.dir(response);
         })
         .catch(error => {
@@ -283,13 +296,25 @@ async function updateContact(id, body) {
         });
 }
 
+async function postAddContact(body) {
+    return await axiosInstance
+        .post('/contacts', body)
+        .then(response => {
+            console.dir(response.data);
+        })
+        .catch(error => {
+            console.dir(error.response);
+        });
+}
+
 export {
     getStatusServer,
     postLoginUser,
     postLogoutUser,
     postSignUp,
-    getUsers,
+    getContacts,
     getUserProfile,
     deleteContact,
     updateContact,
+    postAddContact
 };

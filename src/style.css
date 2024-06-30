@@ -339,7 +339,7 @@ footer {
     display: flex;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+    padding: 14px 10px;
     text-decoration: none;
     background: none;
     border: none;
@@ -354,13 +354,13 @@ footer {
 
 #form-search-input {
     display: flex;
-    width: 110px;
+    width: 120px;
     margin-top: 5px;
     padding: 8;
     float: left;
     border-radius: 5px;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: left;
     outline: none;
 }
 
@@ -374,7 +374,7 @@ footer {
     height: 39px;
     float: left;
     border-radius: 5px;
-    margin-left: -20px;
+    margin-left: -10px;
     color: white;
     background-color: #111;
     outline: none;
@@ -407,7 +407,8 @@ select {
 #aLog,
 #aReg,
 #aChat,
-#aBox {
+#aBox,
+#aAdd {
     padding: 0%;
     margin: 0%;
 }

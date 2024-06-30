@@ -1,12 +1,13 @@
 import {
     postLoginUser,
     postLogoutUser,
-    getUsers,
+    getContacts,
     postSignUp,
     getUserProfile,
     deleteContact,
     updateContact,
-} from './partials/requests';
+    postAddContact,
+} from './partials/requests.js';
 
 import {
     markupModalEvent,
@@ -15,7 +16,8 @@ import {
     marcupCard,
     markupUpdateProfile,
     markupNavbarItems,
-} from './partials/markup';
+    markupContact,
+} from './partials/markup.js';
 
 import { blinkAnim, iterOneAnim, animCard } from './partials/anim';
 import { cleanContent, cleanIfAuthorized } from './partials/clean';
@@ -167,7 +169,7 @@ function loginData() {
         const sndBtn = sendForm.lastElementChild;
         const closeElement = sendForm.parentNode.parentElement;
 
-        sendForm.addEventListener('submit', async data => {
+        sendForm.addEventListener('submit', data => {
             data.preventDefault();
             sndBtn.style.background = 'black';
             toggleLoader();
@@ -179,8 +181,9 @@ function loginData() {
                 password: password.value,
             };
             // console.dir(sendForm.lastElementChild);
-            await postLoginUser(sendData);
+            postLoginUser(sendData);
             cleanIfAuthorized();
+
             sndBtn.setAttribute('disabled', '');
             email.disabled = true;
             password.disabled = true;
@@ -188,7 +191,8 @@ function loginData() {
             setTimeout(closeModalHandler, 2000, closeElement);
             toggleLoader();
             authUser();
-            searchUsers();
+            searchContacts();
+            addContact()
         });
         // sendForm.lastElementChild.setAttribute('disabled', "")
     });
@@ -199,9 +203,9 @@ loginData();
 function logoutUser() {
     const logout = document.querySelector('.logout-item');
     // console.dir(logout);
-    logout.addEventListener('click', async e => {
+    logout.addEventListener('click', e => {
         e.preventDefault();
-        await postLogoutUser();
+        postLogoutUser();
         menuShowHide();
         cleanContent();
     });
@@ -221,7 +225,7 @@ function signupData() {
 
         // console.dir(sendRegForm.elements[4]);
         // console.dir(sndBtn);
-        sendRegForm.addEventListener('submit', async data => {
+        sendRegForm.addEventListener('submit', data => {
             data.preventDefault();
             let imageAvatar = sendRegForm.elements[4].files[0];
 
@@ -237,7 +241,7 @@ function signupData() {
             };
 
             const jsonData = JSON.stringify(sendData);
-            await postSignUp(jsonData, imageAvatar);
+            postSignUp(jsonData, imageAvatar);
 
             sndBtn.setAttribute('disabled', '');
             username.disabled = true;
@@ -251,7 +255,7 @@ function signupData() {
 }
 signupData();
 
-async function searchUsers() {
+async function searchContacts() {
     const formSearch = document.querySelector('.form-menu');
     const searchSelect = document.querySelector('#form-search-select');
     const searchInput = document.querySelector('#form-search-input');
@@ -260,12 +264,13 @@ async function searchUsers() {
         const selectedOption = this.selectedOptions[0].text.toLowerCase();
         if (selectedOption === 'birthday') {
             searchInput.setAttribute('type', 'date');
+            searchInput.value = new Date().toISOString().substring(0, 10);
         } else {
             searchInput.setAttribute('type', 'text');
         }
     });
 
-    formSearch.addEventListener('submit', async e => {
+    formSearch.addEventListener('submit', e => {
         e.preventDefault();
         const qValue = e.target[0].value.trim();
         const qValueUp = qValue.charAt(0).toUpperCase() + qValue.slice(1);
@@ -273,12 +278,12 @@ async function searchUsers() {
             searchSelect.selectedOptions[0].text.toLowerCase();
 
         if (selectedOption === 'birthday') {
-            await getUsers(`?${selectedOption}=${e.target[0].value}`);
+            getContacts(`?${selectedOption}=${e.target[0].value}`);
         } else {
             if (selectedOption === 'name' || selectedOption === 'surname') {
-                await getUsers(`?${selectedOption}=${qValueUp}`);
+                getContacts(`?${selectedOption}=${qValueUp}`);
             } else {
-                await getUsers(`?${selectedOption}=${qValue}`);
+                getContacts(`?${selectedOption}=${qValue}`);
             }
         }
         searchInput.value = '';
@@ -295,8 +300,8 @@ async function contactProfile(listCards, data) {
     const cardProfile = document.querySelector('.cardProfile');
 
     [...listCards.children].forEach((card, index) => {
-        card.addEventListener('click', async e => {
-            await e.preventDefault();
+        card.addEventListener('click', e => {
+            e.preventDefault();
 
             if (e.target == card.children[2].children[0]) {
                 // console.dir('Card: ', listCards.children);
@@ -306,7 +311,7 @@ async function contactProfile(listCards, data) {
                     marcupCard(data[index])
                 );
                 cardProfile.classList.add('modal-show');
-                await animCard(cardProfile);
+                animCard(cardProfile);
 
                 const btnCard = document.querySelector('.profileBtns');
 
@@ -325,7 +330,7 @@ async function contactProfile(listCards, data) {
                         await updateProfile(data[index], cardProfile);
                     }
                 });
-                await closeProfile(cardProfile);
+                closeProfile(cardProfile);
             }
         });
     });
@@ -340,11 +345,11 @@ async function updateProfile(body, card) {
     closeModalHandler(card);
 
     const formUpd = document.querySelector('.contact-form');
-    formUpd.addEventListener('submit', async e => {
+    formUpd.addEventListener('submit', e => {
         e.preventDefault();
         // console.dir(body.id, e.target.name.value);
         const { name, surname, email, phone, birthday } = e.target;
-        await updateContact(body.id, {
+        updateContact(body.id, {
             name: name.value,
             surname: surname.value,
             email: email.value,
@@ -352,17 +357,64 @@ async function updateProfile(body, card) {
             birthday: birthday.value,
         });
         closeModalHandler(updProfile);
-        getUsers();
+        getContacts('');
     });
-
     onCloseClickModal(updProfile);
     onCloseEscModal(updProfile);
+}
+
+async function addContact() {
+    const addLink = document.querySelector('.jsAdd');
+    const newContact = document.querySelector('.addContact');
+    
+    newContact.classList.add('modal-show');
+    
+    addLink.addEventListener('click', e => {
+        e.preventDefault();
+        newContact.insertAdjacentHTML('afterbegin', markupContact());
+        // console.dir(newContact.children[0]);
+        const formAdd = document.querySelector('.contact-form');
+        const sndBtn = formAdd.lastElementChild;
+        const closeElement = formAdd.parentNode.parentElement;
+        
+        formAdd.addEventListener('submit', data => {
+            data.preventDefault();
+            // console.dir(data.target);
+            toggleLoader();
+            const {
+                target: { name, surname, email, phone, birthday },
+            } = data;
+            const sendData = {
+                name: name.value.charAt(0).toUpperCase() + name.value.slice(1),
+                surname:
+                surname.value.charAt(0).toUpperCase() +
+                surname.value.slice(1),
+                email: email.value,
+                phone: phone.value.replaceAll('-', ''),
+                birthday: birthday.value,
+            };
+            postAddContact(sendData);
+            
+            sndBtn.setAttribute('disabled', '');
+            name.disabled = true;
+            surname.disabled = true;
+            email.disabled = true;
+            phone.disabled = true;
+            birthday.disabled = true;
+
+            setTimeout(closeModalHandler, 2000, closeElement);
+            toggleLoader();
+            getContacts('');
+        });
+        onCloseClickModal(newContact);
+        onCloseEscModal(newContact);
+    });
 }
 
 async function closeProfile(card) {
     let btnProfile = document.querySelector('.cancelButton');
 
-    btnProfile.addEventListener('click', async e => {
+    btnProfile.addEventListener('click', e => {
         e.preventDefault();
         closeModalHandler(card);
     });
@@ -387,10 +439,11 @@ function eventModal(name, text, color, addtext) {
 
 export {
     authUser,
-    searchUsers,
+    searchContacts,
     menuShowHide,
     eventModal,
     iterOneAnim,
     blinkAnim,
     contactProfile,
+    addContact,
 };

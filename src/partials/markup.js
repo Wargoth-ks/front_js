@@ -79,8 +79,14 @@ function marcupCard(card) {
         '$1-$2-$3-$4-$5'
     );
 
-    const cr_at = created_at.split('.')[0];
-    const up_at = updated_at.split('.')[0];
+    const options = {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+    };
+    const bd = new Date(birthday).toLocaleDateString('UTC');
+    const cr_at = new Date(created_at).toLocaleDateString('UTC', options);
+    const up_at = new Date(updated_at).toLocaleDateString('UTC', options);
 
     return `<div class="profileContact">
                 <div class="imgProfile">
@@ -96,7 +102,7 @@ function marcupCard(card) {
                             <li id="idProfile"><span class="labelProfile">ID:</span> <span class="valueProfile">${id}</span></li>
                             <li id="emailProfile"><span class="labelProfile">Email:</span> <span class="valueProfile">${email}</span></li>
                             <li id="phoneProfile"><span class="labelProfile">Phone:</span> <span class="valueProfile">${tel}</span></li>
-                            <li id="birthdayProfile"><span class="labelProfile">Birthday:</span> <span class="valueProfile">${birthday}</span></li>
+                            <li id="birthdayProfile"><span class="labelProfile">Birthday:</span> <span class="valueProfile">${bd}</span></li>
                             <li id="createdProfile"><span class="labelProfile">Created:</span> <span class="valueProfile">${cr_at}</span></li>
                             <li id="updatedProfile"><span class="labelProfile">Updated:</span> <span class="valueProfile">${up_at}</span></li>
                             <div class="profileBtns">
@@ -165,6 +171,14 @@ function markupNavbarItems() {
                 </button>
             </form>
         </li>
+        <li class="jsAdd">
+            <a id="aAdd" href="/add_contact">
+            <button>
+            <svg style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                Add
+            </button>
+            </a>
+        </li>
         <li class="jsChat">
             <a id="aChat" href="/chat">
             <button>
@@ -173,15 +187,29 @@ function markupNavbarItems() {
             </button>
             </a>
         </li>
-        <li class="jsInbox">
-            <a id="aBox" href="/inbox">
-            <button>
-            <svg style="height: 23px; display: block; float: left; margin-right: 7px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Mail-Send-Envelope--Streamline-Sharp" height="24" width="24"><desc>Mail Send Envelope Streamline Icon: https://streamlinehq.com</desc><g id="mail-send-envelope--envelope-email-message-unopened-sealed-close"><path id="Rectangle 846" fill="#0000001f" d="M1.0605 3.2484H22.9395V20.7516H1.0605Z" stroke-width="1.5"></path><path id="Rectangle 847" stroke="#ffffff" d="M1.0605 3.2484H22.9395V20.7516H1.0605Z" stroke-width="1.5"></path><path id="Vector 2539" stroke="#ffffff" d="M1.0605 6.5302L12 13.0939L22.9395 6.5302" stroke-width="1.5"></path></g></svg>
-                Messages
-            </button>
-            </a>
-        </li>
     `;
+}
+
+function markupContact() {
+    return `
+        <div class="profile-content">
+                <span class="close" id="registerClose">&times;</span>
+                <h2 class="profile-title">Add Contact</h2>
+                <form class="contact-form">
+                    <label for="contactName">Name:</label>
+                    <input type="name" id="contactName" name="name" required>
+                    <label for="contactSurname">Surname:</label>
+                    <input type="surname" id="contactSurname" name="surname" required>
+                    <label for="contactEmail">Email:</label>
+                    <input type="email" id="contactEmail" name="email" required>
+                    <label for="contactPhone">Phone:</label>
+                    <input type="tel" id="contactPhone" name="phone" required pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}" placeholder="123-45-678-90-00">
+                    <label for="contactBirthday">Birthday:</label>
+                    <input type="date" id="contactBirthday" name="birthday" required>
+                    </label>
+                    <button class="upd-btn" type="submit">Submit</button>
+                </form>
+            </div>`
 }
 
 export {
@@ -192,4 +220,5 @@ export {
     marcupCard,
     markupUpdateProfile,
     markupNavbarItems,
+    markupContact
 };
