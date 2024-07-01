@@ -442,9 +442,6 @@ select {
     margin-top: 120px;
 }
 
-#loginPassword {
-    margin-bottom: 30px;
-}
 
 .reg-form {
     width: 80%;
@@ -457,15 +454,101 @@ select {
 }
 
 #inputImg {
-    font-size: 13px;
-    height: 25px;
+    width: 90%;
+}
+
+#loginPassword {
+    margin-bottom: 30px;
 }
 
 #registerName,
 #registerEmail,
 #registerPassword,
 #confirmPassword {
-    height: 10px;
+    height: 15px;
+}
+
+#Sign-At--Streamline-Plump {
+    position: absolute;
+    top: 96px;
+    left: 60px;
+}
+
+#passwdLogSvg {
+    position: absolute;
+    top: 171px;
+    left: 60px;
+}
+
+#nameRegSvg {
+    position: absolute;
+    top: 93px;
+    left: 60px;
+}
+
+#emailRegSvg {
+    position: absolute;
+    top: 161px;
+    left: 60px;
+}
+
+#passwdRegSvg {
+    position: absolute;
+    top: 227px;
+    left: 60px;
+}
+
+
+#contactNameSvg {
+    position: absolute;
+    top: 86px;
+    left: 60px;
+}
+#User-Large--Streamline-Font-Awesome {
+    position: absolute;
+    top: 145px;
+    left: 60px;
+}
+#contactMailSvg {
+    position: absolute;
+    top: 205px;
+    left: 60px;
+}
+
+#contactPhoneSvg {
+    position: absolute;
+    top: 265px;
+    left: 60px;
+}
+
+#Cake--Streamline-Sharp {
+    position: absolute;
+    top: 322px;
+    left: 60px;
+}
+
+#loginEmail,
+#loginPassword,
+#registerName,
+#registerEmail,
+#registerPassword,
+#contactName,
+#contactSurname,
+#contactEmail,
+#contactPhone {
+    display: flex;
+    padding-left: 40px;
+    width: auto;
+    text-align: left;
+    opacity: 0.8;
+    outline: none;
+}
+
+#contactBirthday {
+    opacity: 0.8;
+    width: 82%;
+    padding-left: 40px;
+    outline: none;
 }
 
 
@@ -813,7 +896,7 @@ select {
 .update-profile {
     display: none;
     position: fixed;
-    z-index: 1003;
+    z-index: 1002;
     left: 0;
     top: 0;
     width: 100%;

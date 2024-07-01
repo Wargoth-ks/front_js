@@ -169,7 +169,7 @@ function loginData() {
         const sndBtn = sendForm.lastElementChild;
         const closeElement = sendForm.parentNode.parentElement;
 
-        sendForm.addEventListener('submit', data => {
+        sendForm.addEventListener('submit', async data => {
             data.preventDefault();
             sndBtn.style.background = 'black';
             toggleLoader();
@@ -181,7 +181,7 @@ function loginData() {
                 password: password.value,
             };
             // console.dir(sendForm.lastElementChild);
-            postLoginUser(sendData);
+            await postLoginUser(sendData);
             cleanIfAuthorized();
 
             sndBtn.setAttribute('disabled', '');
@@ -190,11 +190,11 @@ function loginData() {
 
             setTimeout(closeModalHandler, 2000, closeElement);
             toggleLoader();
-            authUser();
-            searchContacts();
-            addContact()
+
+            await authUser();
+            await searchContacts();
+            await addContact();
         });
-        // sendForm.lastElementChild.setAttribute('disabled', "")
     });
 }
 
@@ -203,9 +203,9 @@ loginData();
 function logoutUser() {
     const logout = document.querySelector('.logout-item');
     // console.dir(logout);
-    logout.addEventListener('click', e => {
+    logout.addEventListener('click', async e => {
         e.preventDefault();
-        postLogoutUser();
+        await postLogoutUser();
         menuShowHide();
         cleanContent();
     });
@@ -225,8 +225,9 @@ function signupData() {
 
         // console.dir(sendRegForm.elements[4]);
         // console.dir(sndBtn);
-        sendRegForm.addEventListener('submit', data => {
+        sendRegForm.addEventListener('submit', async data => {
             data.preventDefault();
+            toggleLoader();
             let imageAvatar = sendRegForm.elements[4].files[0];
 
             const {
@@ -241,15 +242,14 @@ function signupData() {
             };
 
             const jsonData = JSON.stringify(sendData);
-            postSignUp(jsonData, imageAvatar);
+            await postSignUp(jsonData, imageAvatar);
 
-            sndBtn.setAttribute('disabled', '');
-            username.disabled = true;
-            email.disabled = true;
-            password.disabled = true;
-            avatar.disabled = true;
+            [sndBtn, username, email, password, avatar].forEach(item => {
+                item.setAttribute('disabled', '');
+            });
 
             setTimeout(closeModalHandler, 3000, closeElement);
+            toggleLoader();
         });
     });
 }
@@ -260,7 +260,7 @@ async function searchContacts() {
     const searchSelect = document.querySelector('#form-search-select');
     const searchInput = document.querySelector('#form-search-input');
 
-    searchSelect.addEventListener('change', function () {
+    searchSelect.addEventListener('change', () => {
         const selectedOption = this.selectedOptions[0].text.toLowerCase();
         if (selectedOption === 'birthday') {
             searchInput.setAttribute('type', 'date');
@@ -270,7 +270,7 @@ async function searchContacts() {
         }
     });
 
-    formSearch.addEventListener('submit', e => {
+    formSearch.addEventListener('submit', async e => {
         e.preventDefault();
         const qValue = e.target[0].value.trim();
         const qValueUp = qValue.charAt(0).toUpperCase() + qValue.slice(1);
@@ -278,12 +278,12 @@ async function searchContacts() {
             searchSelect.selectedOptions[0].text.toLowerCase();
 
         if (selectedOption === 'birthday') {
-            getContacts(`?${selectedOption}=${e.target[0].value}`);
+            await getContacts(`?${selectedOption}=${e.target[0].value}`);
         } else {
             if (selectedOption === 'name' || selectedOption === 'surname') {
-                getContacts(`?${selectedOption}=${qValueUp}`);
+                await getContacts(`?${selectedOption}=${qValueUp}`);
             } else {
-                getContacts(`?${selectedOption}=${qValue}`);
+                await getContacts(`?${selectedOption}=${qValue}`);
             }
         }
         searchInput.value = '';
@@ -296,7 +296,7 @@ async function searchContacts() {
     });
 }
 
-async function contactProfile(listCards, data) {
+function contactProfile(listCards, data) {
     const cardProfile = document.querySelector('.cardProfile');
 
     [...listCards.children].forEach((card, index) => {
@@ -313,30 +313,30 @@ async function contactProfile(listCards, data) {
                 cardProfile.classList.add('modal-show');
                 animCard(cardProfile);
 
-                const btnCard = document.querySelector('.profileBtns');
-
-                btnCard.addEventListener('click', async function (e) {
-                    e.preventDefault();
-                    // console.dir(e.target);
-                    if (e.target.textContent == 'Delete') {
-                        await deleteContact(
-                            data[index].id,
-                            cardProfile,
-                            index,
-                            listCards
-                        );
-                    } else if (e.target.textContent == 'Update') {
-                        // console.dir('True');
-                        await updateProfile(data[index], cardProfile);
-                    }
-                });
+                document
+                    .querySelector('.profileBtns')
+                    .addEventListener('click', async e => {
+                        e.preventDefault();
+                        // console.dir(e.target);
+                        if (e.target.textContent == 'Delete') {
+                            await deleteContact(
+                                data[index].id,
+                                cardProfile,
+                                index,
+                                listCards
+                            );
+                        } else if (e.target.textContent == 'Update') {
+                            // console.dir('True');
+                            await updateProfile(data[index], cardProfile);
+                        }
+                    });
                 closeProfile(cardProfile);
             }
         });
     });
 }
 
-async function updateProfile(body, card) {
+function updateProfile(body, card) {
     const updProfile = document.querySelector('.update-profile');
 
     updProfile.classList.add('modal-show');
@@ -345,19 +345,21 @@ async function updateProfile(body, card) {
     closeModalHandler(card);
 
     const formUpd = document.querySelector('.contact-form');
-    formUpd.addEventListener('submit', e => {
+    formUpd.addEventListener('submit', async e => {
         e.preventDefault();
+        toggleLoader();
         // console.dir(body.id, e.target.name.value);
         const { name, surname, email, phone, birthday } = e.target;
-        updateContact(body.id, {
+        await updateContact(body.id, {
             name: name.value,
             surname: surname.value,
             email: email.value,
             phone: phone.value.replaceAll('-', ''),
             birthday: birthday.value,
         });
-        closeModalHandler(updProfile);
-        getContacts('');
+        setTimeout(closeModalHandler, 100, updProfile);
+        toggleLoader();
+        await getContacts('');
     });
     onCloseClickModal(updProfile);
     onCloseEscModal(updProfile);
@@ -366,9 +368,9 @@ async function updateProfile(body, card) {
 async function addContact() {
     const addLink = document.querySelector('.jsAdd');
     const newContact = document.querySelector('.addContact');
-    
+
     newContact.classList.add('modal-show');
-    
+
     addLink.addEventListener('click', e => {
         e.preventDefault();
         newContact.insertAdjacentHTML('afterbegin', markupContact());
@@ -376,8 +378,8 @@ async function addContact() {
         const formAdd = document.querySelector('.contact-form');
         const sndBtn = formAdd.lastElementChild;
         const closeElement = formAdd.parentNode.parentElement;
-        
-        formAdd.addEventListener('submit', data => {
+
+        formAdd.addEventListener('submit', async data => {
             data.preventDefault();
             // console.dir(data.target);
             toggleLoader();
@@ -387,31 +389,28 @@ async function addContact() {
             const sendData = {
                 name: name.value.charAt(0).toUpperCase() + name.value.slice(1),
                 surname:
-                surname.value.charAt(0).toUpperCase() +
-                surname.value.slice(1),
+                    surname.value.charAt(0).toUpperCase() +
+                    surname.value.slice(1),
                 email: email.value,
                 phone: phone.value.replaceAll('-', ''),
                 birthday: birthday.value,
             };
-            postAddContact(sendData);
-            
-            sndBtn.setAttribute('disabled', '');
-            name.disabled = true;
-            surname.disabled = true;
-            email.disabled = true;
-            phone.disabled = true;
-            birthday.disabled = true;
+            await postAddContact(sendData);
 
-            setTimeout(closeModalHandler, 2000, closeElement);
+            [sndBtn, name, surname, email, phone, birthday].forEach(element => {
+                element.setAttribute('disabled', '');
+            });
+
+            setTimeout(closeModalHandler, 500, closeElement);
             toggleLoader();
-            getContacts('');
+            await getContacts('');
         });
         onCloseClickModal(newContact);
         onCloseEscModal(newContact);
     });
 }
 
-async function closeProfile(card) {
+function closeProfile(card) {
     let btnProfile = document.querySelector('.cancelButton');
 
     btnProfile.addEventListener('click', e => {

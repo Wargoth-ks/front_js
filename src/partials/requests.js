@@ -30,7 +30,7 @@ const axiosInstance = axios.create({
         Accept: 'application/json',
     },
     withCredentials: true,
-    // timeout: 10000,
+    timeout: 10000,
     // signal: AbortSignal.timeout(10000)
 });
 
