@@ -17,7 +17,7 @@ import {
 } from './msgs.js';
 import { scaleAnimList } from './anim.js';
 
-import { murkupContacts } from './markup.js';
+import { murkupContacts, markupUser } from './markup.js';
 import { cleanIfAuthorized } from './clean.js';
 
 // let BASE_URL = 'http://0.0.0.0:8000/api';
@@ -253,9 +253,11 @@ async function getUserProfile() {
                 Accept: 'application/json',
             },
         })
-        .then(response => {
-            // console.dir(response.data.avatar);
-            return response.data.avatar;
+        .then(resp => {
+            console.dir(resp.data);
+            const userData = document.querySelector('.menuProfileList');
+            userData.insertAdjacentHTML('afterbegin', markupUser(resp.data));
+            // return resp.data;
         })
         .catch(error => {
             let err = error.response;
@@ -316,5 +318,5 @@ export {
     getUserProfile,
     deleteContact,
     updateContact,
-    postAddContact
+    postAddContact,
 };

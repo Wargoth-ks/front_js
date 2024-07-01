@@ -72,14 +72,11 @@ async function authUser() {
 }
 
 async function menuShowHide() {
-    // const avatar = document.querySelector('#menu-avatar');
-
     menuToggle.classList.toggle('menu-active');
     menuBtn.style.opacity = 1;
 
     if (div.classList.contains('menu-active')) {
-        let avatar = await getUserProfile();
-        document.querySelector('#menu-avatar').src = avatar;
+        await getUserProfile();
         menuBtn.style.opacity = 0;
     }
 }
@@ -340,6 +337,8 @@ function updateProfile(body, card) {
     const updProfile = document.querySelector('.update-profile');
 
     updProfile.classList.add('modal-show');
+    iterOneAnim(updProfile);
+
     updProfile.insertAdjacentHTML('afterbegin', markupUpdateProfile(body));
 
     closeModalHandler(card);
@@ -369,15 +368,16 @@ async function addContact() {
     const addLink = document.querySelector('.jsAdd');
     const newContact = document.querySelector('.addContact');
 
-    newContact.classList.add('modal-show');
-
     addLink.addEventListener('click', e => {
         e.preventDefault();
+        newContact.classList.add('modal-show');
         newContact.insertAdjacentHTML('afterbegin', markupContact());
         // console.dir(newContact.children[0]);
         const formAdd = document.querySelector('.contact-form');
         const sndBtn = formAdd.lastElementChild;
         const closeElement = formAdd.parentNode.parentElement;
+
+        iterOneAnim(newContact);
 
         formAdd.addEventListener('submit', async data => {
             data.preventDefault();
@@ -417,6 +417,7 @@ function closeProfile(card) {
         e.preventDefault();
         closeModalHandler(card);
     });
+    onCloseEscModal(card)
 }
 
 function eventModal(name, text, color, addtext) {
