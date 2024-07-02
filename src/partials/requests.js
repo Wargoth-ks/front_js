@@ -30,12 +30,12 @@ const axiosInstance = axios.create({
         Accept: 'application/json',
     },
     withCredentials: true,
-    timeout: 10000,
+    timeout: 5000,
     // signal: AbortSignal.timeout(10000)
 });
 
 axiosRetry(axiosInstance, {
-    retries: 5,
+    retries: 10,
     shouldResetTimeout: true,
     retryDelay: retryCount => {
         console.log(`Retry attempt: ${retryCount}`);
@@ -271,7 +271,7 @@ async function getUserProfile() {
             );
             // reloadWithTimeout();
             setTimeout(menuShowHide, 300);
-            return Promise.reject(error);
+            // return Promise.reject(error);
         });
 }
 

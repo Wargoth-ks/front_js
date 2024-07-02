@@ -265,7 +265,7 @@ footer {
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: intersect;
-    animation: rotate 10s linear infinite;
+    animation: rotate 20s linear infinite;
 }
 
 .menuAvatar:after {
@@ -276,7 +276,7 @@ footer {
         radial-gradient(100px at right 150px bottom 50px, #15c5d5 100%, #0000);
     filter: blur(60px);
     opacity: .5;
-    animation: rotate 10s linear infinite;
+    animation: rotate 20s linear infinite;
 }
 
 .menuAvatar>img {

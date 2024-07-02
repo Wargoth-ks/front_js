@@ -133,7 +133,7 @@ function marcupCard(card) {
 
     return `<div class="profileContact">
                 <div class="imgProfile">
-                    <img src="https://cdn.season-of-mist.com/media/catalog/product/cache/1/image/500x500/9df78eab33525d08d6e5fb8d27136e95/V/a/Various-Artists-In-Mordor-Where-The-Shadows-Are-Homage-To-Summoning-3CD-BOX-56809-1-1487319213.jpg" alt="">
+                    <img src="https://cdn.season-of-mist.com/media/catalog/product/cache/1/image/500x500/9df78eab33525d08d6e5fb8d27136e95/V/a/Various-Artists-In-Mordor-Where-The-Shadows-Are-Homage-To-Summoning-3CD-BOX-56809-1-1487319213.jpg" alt="" loading="lazy">
                 </div>
                 <div class="profileDetails">
                     <button class="cancelButton">
@@ -237,7 +237,7 @@ function markupUser(data) {
                 <li>
                     <div id="menu-id">
                         <div class="menuAvatar">
-                            <img id="menu-avatar" src="${avatar}" alt="">
+                            <img id="menu-avatar" src="${avatar}" alt="" loading="lazy">
                         </div>
                         <div class="userProfieInfo">
                             <p style="font-size: 1.5vw" id="userProfileName">${name}</p>

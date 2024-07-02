@@ -31,15 +31,15 @@ const btns = document.querySelectorAll('.js-btns');
 const modals = document.querySelectorAll('.modal');
 // const jsList = document.querySelector('.js-list')
 
-function loadingPage() {
-    window.addEventListener('DOMContentLoaded', function () {
-        toggleLoader();
+async function loadingPage() {
+    window.addEventListener('DOMContentLoaded', async function () {
+        await toggleLoader();
     });
 
-    window.addEventListener('load', function () {
+    window.addEventListener('load', async function () {
         document.readyState === 'complete'
             ? setTimeout(() => toggleLoader(), 2000)
-            : document.addEventListener('readystatechange', () => {
+            : document.addEventListener('readystatechange', async () => {
                   if (document.readyState === 'complete') {
                       setTimeout(() => toggleLoader(), 2000);
                   }
@@ -56,7 +56,7 @@ function navItemsLoad() {
 
 setTimeout(navItemsLoad, 2000);
 
-function toggleLoader() {
+async function toggleLoader() {
     const loader = document.querySelector('.loadPage').classList;
 
     if (loader.contains('modal-show')) {
@@ -74,9 +74,10 @@ async function authUser() {
 async function menuShowHide() {
     menuToggle.classList.toggle('menu-active');
     menuBtn.style.opacity = 1;
-
     if (div.classList.contains('menu-active')) {
+        await toggleLoader();
         await getUserProfile();
+        await toggleLoader();
         menuBtn.style.opacity = 0;
         logoutUser();
     } else {
@@ -159,7 +160,7 @@ function closeModalHandler(modal) {
     modal.innerHTML = '';
 }
 
-function loginData() {
+async function loginData() {
     const loginBtn = document.querySelector('#aLog');
     // console.dir(formData);
 
@@ -173,7 +174,7 @@ function loginData() {
         sendForm.addEventListener('submit', async data => {
             data.preventDefault();
             sndBtn.style.background = 'black';
-            toggleLoader();
+            await toggleLoader();
             const {
                 target: { email, password },
             } = data;
@@ -189,8 +190,8 @@ function loginData() {
             email.disabled = true;
             password.disabled = true;
 
-            setTimeout(closeModalHandler, 2000, closeElement);
-            toggleLoader();
+            setTimeout(closeModalHandler, 1000, closeElement);
+            await toggleLoader();
 
             await authUser();
             await searchContacts();
@@ -206,8 +207,10 @@ function logoutUser() {
     // console.dir(logout);
     logout.addEventListener('click', async e => {
         e.preventDefault();
+        await toggleLoader();
         await postLogoutUser();
-        menuShowHide();
+        await toggleLoader();
+        await menuShowHide();
         cleanContent();
     });
 }
@@ -226,7 +229,7 @@ function signupData() {
         // console.dir(sndBtn);
         sendRegForm.addEventListener('submit', async data => {
             data.preventDefault();
-            toggleLoader();
+            await toggleLoader();
             let imageAvatar = sendRegForm.elements[4].files[0];
 
             const {
@@ -248,7 +251,7 @@ function signupData() {
             });
 
             setTimeout(closeModalHandler, 3000, closeElement);
-            toggleLoader();
+            await toggleLoader();
         });
     });
 }
@@ -348,7 +351,7 @@ function updateProfile(body, card) {
     const formUpd = document.querySelector('.contact-form');
     formUpd.addEventListener('submit', async e => {
         e.preventDefault();
-        toggleLoader();
+        await toggleLoader();
         // console.dir(body.id, e.target.name.value);
         const { name, surname, email, phone, birthday } = e.target;
         await updateContact(body.id, {
@@ -359,7 +362,7 @@ function updateProfile(body, card) {
             birthday: birthday.value,
         });
         setTimeout(closeModalHandler, 100, updProfile);
-        toggleLoader();
+        await toggleLoader();
         await getContacts('');
     });
     onCloseClickModal(updProfile);
@@ -384,7 +387,7 @@ async function addContact() {
         formAdd.addEventListener('submit', async data => {
             data.preventDefault();
             // console.dir(data.target);
-            toggleLoader();
+            await toggleLoader();
             const {
                 target: { name, surname, email, phone, birthday },
             } = data;
@@ -404,7 +407,7 @@ async function addContact() {
             });
 
             setTimeout(closeModalHandler, 500, closeElement);
-            toggleLoader();
+            await toggleLoader();
             await getContacts('');
         });
         onCloseClickModal(newContact);
