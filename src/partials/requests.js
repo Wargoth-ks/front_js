@@ -35,7 +35,7 @@ const axiosInstance = axios.create({
 });
 
 axiosRetry(axiosInstance, {
-    retries: 3,
+    retries: 5,
     shouldResetTimeout: true,
     retryDelay: retryCount => {
         console.log(`Retry attempt: ${retryCount}`);
@@ -254,9 +254,11 @@ async function getUserProfile() {
             },
         })
         .then(resp => {
-            console.dir(resp.data);
-            const userData = document.querySelector('.menuProfileList');
-            userData.insertAdjacentHTML('afterbegin', markupUser(resp.data));
+            console.dir(resp);
+            if (resp.status !== 500) {
+                const userData = document.querySelector('.menuProfileList');
+                userData.insertAdjacentHTML('afterbegin', markupUser(resp.data));
+            }
             // return resp.data;
         })
         .catch(error => {
@@ -269,6 +271,7 @@ async function getUserProfile() {
             );
             // reloadWithTimeout();
             setTimeout(menuShowHide, 300);
+            return Promise.reject(error);
         });
 }
 

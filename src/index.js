@@ -78,6 +78,10 @@ async function menuShowHide() {
     if (div.classList.contains('menu-active')) {
         await getUserProfile();
         menuBtn.style.opacity = 0;
+        logoutUser();
+    } else {
+        const clr = document.querySelector(".menuProfileList")
+        clr.innerHTML = ""
     }
 }
 
@@ -207,8 +211,6 @@ function logoutUser() {
         cleanContent();
     });
 }
-
-logoutUser();
 
 function signupData() {
     const regBtn = document.querySelector('#aReg');

@@ -170,7 +170,7 @@ footer {
     position: fixed;
     left: 0;
     top: 0;
-    width: 20%;
+    width: 20vw;
     height: 100vh;
     display: flex;
     align-items: center;
@@ -218,7 +218,7 @@ footer {
 }
 
 #menu-avatar {
-    position: absolute;
+    position: fixed;
     top: 30px;
     left: 50%;
     transform: translateX(-50%);
@@ -228,6 +228,66 @@ footer {
     height: auto;
     margin-bottom: 2%;
 }
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.menuAvatar {
+    width: 13vw;
+    height: 13vw;
+    font-size: 30px;
+    color: #fff;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    position: fixed;
+    z-index: 0;
+    cursor: pointer;
+    top: 5.2%;
+    left: 17.7%;
+    transform: translateX(-50%, -50%);
+}
+
+.menuAvatar:before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    padding: 10px;
+    border-radius: 50%;
+    background: conic-gradient(#e1211a, #0000 30deg 120deg, #00f8d3 150deg 180deg, #0000 210deg 300deg, #e11e1e 330deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: intersect;
+    animation: rotate 10s linear infinite;
+}
+
+.menuAvatar:after {
+    content: "";
+    position: absolute;
+    inset: -50px;
+    background: radial-gradient(100px at left 150px top 50px, #e91408 100%, #0000),
+        radial-gradient(100px at right 150px bottom 50px, #15c5d5 100%, #0000);
+    filter: blur(60px);
+    opacity: .5;
+    animation: rotate 10s linear infinite;
+}
+
+.menuAvatar>img {
+    border-radius: 50%;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
 
 
 .menu-list {
@@ -253,18 +313,22 @@ footer {
 
 .menuProfileList li button {
     display: flex;
-    justify-content: left;
     background-color: black;
     color: white;
     position: relative;
     border: none !important;
     background: transparent;
     font-size: 1vw;
-    align-items: left;
-    align-content: left;
-    /* right: 15%; */
-    padding-top: 15%;
-    left: 0%;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /* right: 25%; */
+    width: 90%;
+    height: 100%;
+    padding: 5%;
+    right: 10%;
+    /* left: 0%; */
+    bottom: -50px;
     transform: translateX(-150% -50%);
 }
 
@@ -283,6 +347,13 @@ footer {
 
     #menu-avatar {
         width: 70%;
+    }
+
+    .menuAvatar {
+        min-width: 12vw;
+        min-height: 12vw;
+        top: 5.2%;
+        left: 33.5%;
     }
 }
 
@@ -314,17 +385,38 @@ footer {
     #menu-avatar {
         min-width: 30vw;
     }
+
+    .menuAvatar {
+        min-width: 29vw;
+        min-height: 29vw;
+        top: 5.5%;
+        left: 14%;
+    }
 }
 
 @media only screen and (min-width: 480px) and (max-width: 800px) {
     #menu-avatar {
         min-width: 23vw;
     }
+
+    .menuAvatar {
+        min-width: 23vw;
+        min-height: 23vw;
+        top: 5.2%;
+        left: 21.2%;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
     #menu-avatar {
         min-width: 20vw;
+    }
+
+    .menuAvatar {
+        min-width: 20vw;
+        min-height: 20vw;
+        top: 5.2%;
+        left: 25%;
     }
 }
 
@@ -421,7 +513,6 @@ select {
 #aLog,
 #aReg,
 #aChat,
-#aBox,
 #aAdd {
     padding: 0%;
     margin: 0%;
@@ -517,11 +608,13 @@ select {
     top: 86px;
     left: 60px;
 }
+
 #User-Large--Streamline-Font-Awesome {
     position: absolute;
     top: 145px;
     left: 60px;
 }
+
 #contactMailSvg {
     position: absolute;
     top: 205px;
@@ -1058,3 +1151,76 @@ select {
 .jsListItems {
     opacity: 0;
 }
+
+
+/* .menuAvatar {
+    width: 600px;
+    height: 600px;
+    font-size: 30px;
+    color: #fff;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    position: relative;
+    z-index: 0;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.menuAvatar:before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    padding: 10px;
+    border-radius: 50%;
+    background: conic-gradient(#ff53bb,
+            #0000 30deg 120deg,
+            #00f8d3 150deg 180deg,
+            #0000 210deg 300deg,
+            #ff53bb 330deg);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: intersect
+}
+
+.menuAvatar:after {
+    content: "";
+    position: absolute;
+    inset: -100px;
+    background:
+        radial-gradient(200px at left 400px top 150px, #ff53bb 100%, #0000),
+        radial-gradient(200px at right 400px bottom 150px, #00f8d3 100%, #0000);
+    filter: blur(120px);
+    opacity: .5;
+}
+
+.menuAvatar:before,
+.menuAvatar:after {
+    transition: .5s, 99999s 99999s transform;
+}
+
+.menuAvatar:hover {
+    box-shadow: 0 0 0 1px #666;
+}
+
+.menuAvatar:hover:before,
+.menuAvatar:hover:after {
+    transform: rotate(36000deg);
+    transition: .5s, 600s linear transform;
+}
+
+.menuAvatar:before {
+    background-color: #222;
+    border: 2px solid #333;
+}
+
+.menuAvatar>img {
+    border-radius: 50%;
+    left: -2px;
+    position: relative;
+    top: 2px;
+    width: 594px;
+    opacity: 0.9;
+} */
