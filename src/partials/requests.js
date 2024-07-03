@@ -7,6 +7,7 @@ import {
     authUser,
     searchContacts,
     addContact,
+    openChat,
 } from '..';
 import {
     messConfirm,
@@ -103,6 +104,7 @@ async function getStatusServer() {
                 cleanIfAuthorized();
                 authUser();
                 addContact();
+                openChat();
                 searchContacts();
             } else {
                 console.log(response);
@@ -257,7 +259,10 @@ async function getUserProfile() {
             console.dir(resp);
             if (resp.status !== 500) {
                 const userData = document.querySelector('.menuProfileList');
-                userData.insertAdjacentHTML('afterbegin', markupUser(resp.data));
+                userData.insertAdjacentHTML(
+                    'afterbegin',
+                    markupUser(resp.data)
+                );
             }
             // return resp.data;
         })
@@ -312,6 +317,52 @@ async function postAddContact(body) {
         });
 }
 
+async function chatConnection() {
+
+    let client_id = Date.now();
+    let ws = new WebSocket(
+        `ws://addressbook-wargcorp-8f592fab.koyeb.app/api/chat/ws/${client_id}`
+    );
+    document.querySelector('#ws-id').textContent = client_id;
+    let chatForm = document.querySelector('.chatForm');
+    console.dir(ws);
+
+    ws.onopen = async function (e) {
+        console.log('[open] Connection established');
+        ws.send('Hello, server!');
+    };
+
+    ws.onmessage = async function (event) {
+        let messages = document.getElementById('messages');
+        let message = document.createElement('li');
+        let content = document.createTextNode(event.data);
+        
+        message.appendChild(content);
+        messages.appendChild(message);
+    };
+
+    ws.onclose = async function (event) {
+        if (event.wasClean) {
+            console.log(
+                `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
+            );
+        } else {
+            console.error('[close] Connection died');
+        }
+    };
+
+    ws.onerror = async function (error) {
+        console.error(`[error] ${error.message}`);
+    };
+
+    chatForm.addEventListener('submit', async event => {
+        let input = document.getElementById('messageText');
+        ws.send(input.value);
+        // input.value = '';
+        event.preventDefault();
+    });
+}
+
 export {
     getStatusServer,
     postLoginUser,
@@ -322,4 +373,5 @@ export {
     deleteContact,
     updateContact,
     postAddContact,
+    chatConnection,
 };

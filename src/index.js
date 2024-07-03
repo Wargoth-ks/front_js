@@ -7,6 +7,8 @@ import {
     deleteContact,
     updateContact,
     postAddContact,
+    chatConnection,
+    sendMessage
 } from './partials/requests.js';
 
 import {
@@ -17,6 +19,7 @@ import {
     markupUpdateProfile,
     markupNavbarItems,
     markupContact,
+    markupChat,
 } from './partials/markup.js';
 
 import { blinkAnim, iterOneAnim, animCard } from './partials/anim';
@@ -196,6 +199,9 @@ async function loginData() {
             await authUser();
             await searchContacts();
             await addContact();
+            await openChat();
+            // await chatConnection();
+            // await sendMessage();
         });
     });
 }
@@ -415,6 +421,20 @@ async function addContact() {
     });
 }
 
+async function openChat() {
+    const insertChat = document.querySelector(".chatClient")
+    const showChat = document.querySelector('.jsChat');
+
+    insertChat.classList.add('modal-show');
+
+    showChat.addEventListener("click", async (e) => {
+        e.preventDefault()
+        insertChat.insertAdjacentHTML("afterbegin", markupChat())
+        insertChat.style.display = "flex"
+        await chatConnection();
+    })
+}
+
 function closeProfile(card) {
     let btnProfile = document.querySelector('.cancelButton');
 
@@ -451,4 +471,5 @@ export {
     blinkAnim,
     contactProfile,
     addContact,
+    openChat
 };
