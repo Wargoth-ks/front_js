@@ -352,14 +352,14 @@ footer {
     #menu-avatar {
         min-width: 25vw;
     }
-    
+
     .menuAvatar {
         width: 26vw;
         height: 26vw;
         margin-top: -1%;
         left: 0%;
     }
-    
+
     .menuProfileList li button {
         font-size: 3vw;
     }
@@ -1165,29 +1165,157 @@ select {
     }
 }
 
-.modal-show {
-    display: flex;
-}
 
 .jsListItems {
     opacity: 0;
 }
 
+
+/* Chat Client */
 .chatClient {
     display: none;
-    flex-direction: column;
-    justify-content: center;
-    background-color: black;
-    margin: 3% auto;
-    padding: 15px;
-    border: 1px solid #888;
-    max-width: 300px;
     position: fixed;
-    align-items: center;
+    top: 0;
+    left: 0;
     width: 100%;
-    border-radius: 5%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.chatClient.modal-show {
+    display: flex;
+}
+
+.cont {
+    background-color: white;
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+#chat {
+    padding: 1rem;
+    background-color: #f0f0f0;
+    border-radius: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+#messages {
+    list-style-type: none;
+    padding: 0;
+}
+
+#username-form button {
+    background-color: #28a745;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.3rem;
+}
+
+#message-input {
+    margin-bottom: 1rem;
+}
+
+#message {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+}
+
+#send {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0 0.3rem 0.3rem 0;
+}
+
+#usernameModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-con {
+    background-color: #fff;
+    width: 300px;
+    padding: 1rem;
+    border-radius: 0.3rem;
+}
+
+#usernameModal h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#usernameInput {
+    width: 94%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+.modal-con button {
+    background-color: #6c757d;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.3rem;
+    margin-right: 0.5rem;
+}
+
+.modal-con button#join {
+    background-color: #007bff;
+}
+
+.user-message {
+    background-color: #17A2B8;
+    color: #fff;
+    border-radius: 0.5em;
+    padding: 5px 10px;
+    margin: 5px 0;
+    float: right;
+    clear: both;
+}
+
+.other-message {
+    background-color: #007BFF;
+    color: #fff;
+    border-radius: 0.5em;
+    padding: 5px 10px;
+    margin: 5px 0;
+    float: left;
+    clear: both;
+}
+
+
+#messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* Убираем отступы по умолчанию, чтобы избежать лишнего пространства */
+    overflow-y: auto; /* Включаем вертикальную прокрутку */
+    max-height: 400px; /* Ограничиваем высоту для прокрутки */
+}
+
+#messages li {
+    clear: both; /* Гарантирует, что каждое сообщение начнется с новой строки */
 }

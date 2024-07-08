@@ -77,6 +77,7 @@ async function authUser() {
 async function menuShowHide() {
     menuToggle.classList.toggle('menu-active');
     menuBtn.style.opacity = 1;
+    
     if (div.classList.contains('menu-active')) {
         await toggleLoader();
         await getUserProfile();
@@ -199,7 +200,7 @@ async function loginData() {
             await authUser();
             await searchContacts();
             await addContact();
-            await openChat();
+            openChat();
             // await chatConnection();
             // await sendMessage();
         });
@@ -421,19 +422,22 @@ async function addContact() {
     });
 }
 
-async function openChat() {
+function openChat() {
     const insertChat = document.querySelector(".chatClient")
     const showChat = document.querySelector('.jsChat');
 
-    insertChat.classList.add('modal-show');
-
+    
     showChat.addEventListener("click", async (e) => {
         e.preventDefault()
+        insertChat.classList.add("modal-show")
         insertChat.insertAdjacentHTML("afterbegin", markupChat())
-        insertChat.style.display = "flex"
+        // insertChat.style.display = "flex"
         await chatConnection();
     })
+    onCloseEscModal(insertChat)
 }
+
+// openChat()
 
 function closeProfile(card) {
     let btnProfile = document.querySelector('.cancelButton');

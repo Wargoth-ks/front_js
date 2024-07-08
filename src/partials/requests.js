@@ -21,8 +21,8 @@ import { scaleAnimList } from './anim.js';
 import { murkupContacts, markupUser } from './markup.js';
 import { cleanIfAuthorized } from './clean.js';
 
-// let BASE_URL = 'http://0.0.0.0:8000/api';
-const BASE_URL = process.env.URL;
+let BASE_URL = 'http://0.0.0.0:8000/api';
+// const BASE_URL = "https://" + process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -317,50 +317,124 @@ async function postAddContact(body) {
         });
 }
 
-async function chatConnection() {
-
-    let client_id = Date.now();
-    let ws = new WebSocket(
-        `ws://addressbook-wargcorp-8f592fab.koyeb.app/api/chat/ws/${client_id}`
-    );
-    document.querySelector('#ws-id').textContent = client_id;
-    let chatForm = document.querySelector('.chatForm');
-    console.dir(ws);
-
-    ws.onopen = async function (e) {
-        console.log('[open] Connection established');
-        ws.send('Hello, server!');
-    };
-
-    ws.onmessage = async function (event) {
-        let messages = document.getElementById('messages');
-        let message = document.createElement('li');
-        let content = document.createTextNode(event.data);
-        
-        message.appendChild(content);
-        messages.appendChild(message);
-    };
-
-    ws.onclose = async function (event) {
-        if (event.wasClean) {
-            console.log(
-                `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
+async function getUserData() {
+    return await axiosInstance
+        .get('/users/my_profile', {
+            headers: {
+                Accept: 'application/json',
+            },
+        })
+        .then(resp => resp.data)
+        .catch(error => {
+            let err = error.response;
+            let msg = `${err.data.detail}`;
+            console.dir('User profile ERROR: ', error.response);
+            eventModal(
+                ...messUnAuth,
+                msg.charAt(0).toUpperCase() + msg.slice(1)
             );
-        } else {
-            console.error('[close] Connection died');
-        }
-    };
+        });
+}
 
-    ws.onerror = async function (error) {
-        console.error(`[error] ${error.message}`);
-    };
+async function chatConnection() {
+    let socket;
 
-    chatForm.addEventListener('submit', async event => {
-        let input = document.getElementById('messageText');
-        ws.send(input.value);
-        // input.value = '';
-        event.preventDefault();
+    function initializeWebSocket() {
+        socket = new WebSocket('ws://localhost:8000/api/chat/ws');
+
+        socket.onopen = function (event) {
+            event.preventDefault()
+            console.log('WebSocket connection established.');
+        };
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            const msgClass = data.isMe ? 'user-message' : 'other-message';
+            const sender = data.isMe ? 'You' : data.username;
+            const message = data.data;
+
+            const messageElement = document.createElement('li');
+            messageElement.classList.add('clearfix');
+
+            const divElement = document.createElement('div');
+            divElement.classList.add(msgClass);
+            divElement.textContent = sender + ': ' + message;
+
+            messageElement.appendChild(divElement);
+            document.getElementById('messages').appendChild(messageElement);
+            document.getElementById('chat').scrollTop =
+                document.getElementById('chat').scrollHeight;
+        };
+
+        socket.onerror = function () {
+            console.error('WebSocket error. Please rejoin the chat.');
+            showJoinModal();
+        };
+
+        socket.onclose = function (event) {
+            if (event.code === 1000) {
+                console.log('WebSocket closed normally.');
+            } else {
+                console.error(
+                    'WebSocket closed with error code: ' +
+                        event.code +
+                        '. Please rejoin the chat.'
+                );
+                showJoinModal();
+            }
+        };
+    }
+
+    function showJoinModal() {
+        document.getElementById('username-form').style.display = 'block';
+        document.getElementById('chat').style.display = 'none';
+        document.getElementById('message-input').style.display = 'none';
+        document.getElementById('usernameModal').style.display = 'block'; // Assuming you manage modal display with CSS classes
+    }
+
+    document
+        .getElementById('open-modal')
+        .addEventListener('click', function () {
+            showJoinModal();
+        });
+
+    function joinChat() {
+        document.getElementById('username-form').style.display = 'none';
+        document.getElementById('chat').style.display = 'block';
+        document.getElementById('message-input').style.display = 'block';
+        document.getElementById('usernameModal').style.display = 'none'; // Assuming you manage modal display with CSS classes
+    }
+
+    document.getElementById('join').addEventListener('click', function () {
+        initializeWebSocket();
+        joinChat();
     });
+
+    document.getElementById('send').addEventListener('click', function () {
+        sendMessage();
+    });
+
+    document
+        .getElementById('message')
+        .addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault()
+                sendMessage();
+            }
+        });
+
+    function sendMessage() {
+        const message = document.getElementById('message').value;
+        if (message) {
+            socket.send(
+                JSON.stringify({
+                    message: message,
+                    username: document.getElementById('usernameInput').value,
+                })
+            );
+            document.getElementById('message').value = '';
+        }
+    }
 }
 
 export {

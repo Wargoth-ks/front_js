@@ -1,5 +1,3 @@
-import { sendMessage } from "./requests";
-
 
 function markupNavbarItems() {
     return `
@@ -277,14 +275,31 @@ function markupUser(data) {
 
 function markupChat() {
     return `
-        <h1>WebSocket Chat</h1>
-        <h2>Your ID: <span id="ws-id"></span></h2>
-        <form class="chatForm" action="">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button type="submit">Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
+        <div class="cont">
+            <h1>Websocket Chat</h1>
+            <div id="chat">
+                <ul id="messages"></ul>
+            </div>
+            <div id="username-form">
+                <button id="open-modal">Join</button>
+            </div>
+            <div id="message-input" style="display: none;">
+                <input type="text" id="message" placeholder="Type your message">
+                <button id="send">Send</button>
+            </div>
+        </div>
+    
+        <!-- Username Modal -->
+        <div id="usernameModal">
+            <div class="modal-con">
+                <h2>Enter Your Username</h2>
+                <input type="text" id="usernameInput" placeholder="Your username">
+                <div>
+                    <button type="button" id="close-modal">Close</button>
+                    <button id="join">Join</button>
+                </div>
+            </div>
+        </div>
     `
 }
 
