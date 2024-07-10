@@ -1232,6 +1232,7 @@ select {
 
 #message-input {
     margin-bottom: 1rem;
+    text-align: left;
 }
 
 #message {
@@ -1239,15 +1240,22 @@ select {
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 0.3rem;
+    width: 77%;
+    max-width: 28vw;
 }
 
-#send {
+#send, #leave {
     background-color: #007bff;
     color: #fff;
     font-size: 1rem;
     padding: 0.5rem 1rem;
     border: none;
-    border-radius: 0 0.3rem 0.3rem 0;
+    /* border-radius: 0 0.3rem 0.3rem 0; */
+    border-radius: 0.3rem 0.3rem;
+    text-align: right;
+    float: right;
+    right: 0;
+    margin: 0.2vw;
 }
 
 #usernameModal {
@@ -1331,4 +1339,14 @@ select {
 
 #messages li {
     clear: both; /* Гарантирует, что каждое сообщение начнется с новой строки */
+}
+
+#messages::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Убирает фон полосы прокрутки */
+}
+
+/* Для Firefox */
+#messages {
+    scrollbar-width: none; /* Отключает полосу прокрутки */
 }

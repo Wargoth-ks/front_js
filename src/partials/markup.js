@@ -276,12 +276,13 @@ function markupUser(data) {
 function markupChat() {
     return `
         <div class="cont">
-            <h1>Websocket Chat</h1>
+            <h1>Anonymous Chat</h1>
             <div id="chat">
                 <ul id="messages"></ul>
             </div>
             <div id="message-input" style="display: none;">
                 <input type="text" id="message" placeholder="Type your message">
+                <button id="leave">Leave</button>
                 <button id="send">Send</button>
             </div>
         </div>
@@ -289,11 +290,11 @@ function markupChat() {
         <!-- Username Modal -->
         <div id="usernameModal">
             <div class="modal-con">
-                <h2>Enter Your Username</h2>
+                <h2>Enter your name:</h2>
                 <input type="text" id="usernameInput" placeholder="Your username">
                 <div>
                     <button type="button" id="close-modal">Close</button>
-                    <button id="join">Join</button>
+                    <button type="button" id="join">Join</button>
                 </div>
             </div>
         </div>

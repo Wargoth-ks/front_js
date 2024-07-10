@@ -336,6 +336,25 @@ async function postAddContact(body) {
 //         });
 // }
 
+const showJoinModal = () => {
+    document.getElementById('chat').style.display = 'none';
+    document.getElementById('message-input').style.display = 'none';
+    document.getElementById('usernameModal').style.display = 'block';
+    closeModalUsername();
+};
+
+const closeModalUsername = () => {
+    const client = document.querySelector('.chatClient');
+    client.classList.remove('modal-show');
+    client.innerHTML = '';
+};
+
+const joinChat = () => {
+    document.getElementById('chat').style.display = 'block';
+    document.getElementById('message-input').style.display = 'block';
+    document.getElementById('usernameModal').style.display = 'none'; // Assuming you manage modal display with CSS classes
+};
+
 async function chatConnection() {
     let socket;
 
@@ -349,7 +368,7 @@ async function chatConnection() {
             console.log('WebSocket connection established.');
         };
 
-        socket.onmessage = (e) => {
+        socket.onmessage = e => {
             const data = JSON.parse(e.data);
             const msgClass = data.isMe ? 'user-message' : 'other-message';
             const sender = data.isMe ? 'You' : data.username;
@@ -363,10 +382,12 @@ async function chatConnection() {
             divElement.textContent = sender + ': ' + message;
 
             messageElement.appendChild(divElement);
-            document.getElementById('messages').appendChild(messageElement);
-            document.getElementById('chat').scrollTop =
-                document.getElementById('chat').scrollHeight;
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.appendChild(messageElement);
 
+            requestAnimationFrame(() => {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            });
             // setInterval(function () {
             //     let elem = document.querySelector('#messages');
             //     elem.scrollTop = elem.scrollHeight;
@@ -378,7 +399,7 @@ async function chatConnection() {
             showJoinModal();
         };
 
-        socket.onclose = (e) => {
+        socket.onclose = e => {
             if (e.code === 1000) {
                 console.log('WebSocket closed normally.');
             } else {
@@ -393,25 +414,6 @@ async function chatConnection() {
                 chatConnection();
             }, 5000);
         };
-    }
-
-    const showJoinModal = () => {
-        document.getElementById('chat').style.display = 'none';
-        document.getElementById('message-input').style.display = 'none';
-        document.getElementById('usernameModal').style.display = 'block';
-        closeModalUsername();
-    }
-
-    const closeModalUsername = () => {
-        const client = document.querySelector('.chatClient');
-        client.classList.remove('modal-show');
-        client.innerHTML = '';
-    }
-
-    const joinChat = () => {
-        document.getElementById('chat').style.display = 'block';
-        document.getElementById('message-input').style.display = 'block';
-        document.getElementById('usernameModal').style.display = 'none'; // Assuming you manage modal display with CSS classes
     }
 
     document.getElementById('join').addEventListener('click', e => {
@@ -430,17 +432,25 @@ async function chatConnection() {
         closeModalUsername();
     });
 
-    document.getElementById('message').addEventListener('keydown', e => {
+    document.getElementById('message').addEventListener('keydown', async e => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            sendMessage();
+            await sendMessage();
         }
     });
 
-    const sendMessage = () => {
+    document.getElementById('leave').addEventListener('click', async e => {
+        e.preventDefault();
+        if (socket) {
+            socket.close(1000, 'User left');
+            closeModalUsername();
+        }
+    });
+
+    const sendMessage = async () => {
         const message = document.getElementById('message').value;
         if (message) {
-            socket.send(
+            await socket.send(
                 JSON.stringify({
                     message: message,
                     username: document.getElementById('usernameInput').value,
@@ -448,7 +458,7 @@ async function chatConnection() {
             );
             document.getElementById('message').value = '';
         }
-    }
+    };
 }
 
 export {
