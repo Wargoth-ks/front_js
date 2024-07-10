@@ -22,7 +22,7 @@ import { murkupContacts, markupUser } from './markup.js';
 import { cleanIfAuthorized } from './clean.js';
 
 let BASE_URL = 'http://0.0.0.0:8000/api';
-// const BASE_URL = "https://" + process.env.URL;
+// const BASE_URL = 'https://' + process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -317,38 +317,40 @@ async function postAddContact(body) {
         });
 }
 
-async function getUserData() {
-    return await axiosInstance
-        .get('/users/my_profile', {
-            headers: {
-                Accept: 'application/json',
-            },
-        })
-        .then(resp => resp.data)
-        .catch(error => {
-            let err = error.response;
-            let msg = `${err.data.detail}`;
-            console.dir('User profile ERROR: ', error.response);
-            eventModal(
-                ...messUnAuth,
-                msg.charAt(0).toUpperCase() + msg.slice(1)
-            );
-        });
-}
+// async function getUserData() {
+//     return await axiosInstance
+//         .get('/users/my_profile', {
+//             headers: {
+//                 Accept: 'application/json',
+//             },
+//         })
+//         .then(resp => resp.data)
+//         .catch(error => {
+//             let err = error.response;
+//             let msg = `${err.data.detail}`;
+//             console.dir('User profile ERROR: ', error.response);
+//             eventModal(
+//                 ...messUnAuth,
+//                 msg.charAt(0).toUpperCase() + msg.slice(1)
+//             );
+//         });
+// }
 
 async function chatConnection() {
     let socket;
 
     function initializeWebSocket() {
         socket = new WebSocket('ws://localhost:8000/api/chat/ws');
+        // socket = new WebSocket(
+        //     'ws://addressbook-wargcorp-8f592fab.koyeb.app/api/chat/ws'
+        // );
 
-        socket.onopen = function (event) {
-            event.preventDefault()
+        socket.onopen = () => {
             console.log('WebSocket connection established.');
         };
 
-        socket.onmessage = function (event) {
-            const data = JSON.parse(event.data);
+        socket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
             const msgClass = data.isMe ? 'user-message' : 'other-message';
             const sender = data.isMe ? 'You' : data.username;
             const message = data.data;
@@ -364,66 +366,78 @@ async function chatConnection() {
             document.getElementById('messages').appendChild(messageElement);
             document.getElementById('chat').scrollTop =
                 document.getElementById('chat').scrollHeight;
+
+            // setInterval(function () {
+            //     let elem = document.querySelector('#messages');
+            //     elem.scrollTop = elem.scrollHeight;
+            // }, 1000);
         };
 
-        socket.onerror = function () {
+        socket.onerror = () => {
             console.error('WebSocket error. Please rejoin the chat.');
             showJoinModal();
         };
 
-        socket.onclose = function (event) {
-            if (event.code === 1000) {
+        socket.onclose = (e) => {
+            if (e.code === 1000) {
                 console.log('WebSocket closed normally.');
             } else {
                 console.error(
                     'WebSocket closed with error code: ' +
-                        event.code +
+                        e.code +
                         '. Please rejoin the chat.'
                 );
                 showJoinModal();
             }
+            setTimeout(() => {
+                chatConnection();
+            }, 5000);
         };
     }
 
-    function showJoinModal() {
-        document.getElementById('username-form').style.display = 'block';
+    const showJoinModal = () => {
         document.getElementById('chat').style.display = 'none';
         document.getElementById('message-input').style.display = 'none';
-        document.getElementById('usernameModal').style.display = 'block'; // Assuming you manage modal display with CSS classes
+        document.getElementById('usernameModal').style.display = 'block';
+        closeModalUsername();
     }
 
-    document
-        .getElementById('open-modal')
-        .addEventListener('click', function () {
-            showJoinModal();
-        });
+    const closeModalUsername = () => {
+        const client = document.querySelector('.chatClient');
+        client.classList.remove('modal-show');
+        client.innerHTML = '';
+    }
 
-    function joinChat() {
-        document.getElementById('username-form').style.display = 'none';
+    const joinChat = () => {
         document.getElementById('chat').style.display = 'block';
         document.getElementById('message-input').style.display = 'block';
         document.getElementById('usernameModal').style.display = 'none'; // Assuming you manage modal display with CSS classes
     }
 
-    document.getElementById('join').addEventListener('click', function () {
+    document.getElementById('join').addEventListener('click', e => {
+        e.preventDefault();
         initializeWebSocket();
         joinChat();
     });
 
-    document.getElementById('send').addEventListener('click', function () {
+    document.getElementById('send').addEventListener('click', e => {
+        e.preventDefault();
         sendMessage();
     });
 
-    document
-        .getElementById('message')
-        .addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {
-                event.preventDefault()
-                sendMessage();
-            }
-        });
+    document.querySelector('#close-modal').addEventListener('click', e => {
+        e.preventDefault();
+        closeModalUsername();
+    });
 
-    function sendMessage() {
+    document.getElementById('message').addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    const sendMessage = () => {
         const message = document.getElementById('message').value;
         if (message) {
             socket.send(

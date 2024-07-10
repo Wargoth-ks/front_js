@@ -280,9 +280,6 @@ function markupChat() {
             <div id="chat">
                 <ul id="messages"></ul>
             </div>
-            <div id="username-form">
-                <button id="open-modal">Join</button>
-            </div>
             <div id="message-input" style="display: none;">
                 <input type="text" id="message" placeholder="Type your message">
                 <button id="send">Send</button>

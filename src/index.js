@@ -8,7 +8,7 @@ import {
     updateContact,
     postAddContact,
     chatConnection,
-    sendMessage
+    sendMessage,
 } from './partials/requests.js';
 
 import {
@@ -77,7 +77,7 @@ async function authUser() {
 async function menuShowHide() {
     menuToggle.classList.toggle('menu-active');
     menuBtn.style.opacity = 1;
-    
+
     if (div.classList.contains('menu-active')) {
         await toggleLoader();
         await getUserProfile();
@@ -85,8 +85,8 @@ async function menuShowHide() {
         menuBtn.style.opacity = 0;
         logoutUser();
     } else {
-        const clr = document.querySelector(".menuProfileList")
-        clr.innerHTML = ""
+        const clr = document.querySelector('.menuProfileList');
+        clr.innerHTML = '';
     }
 }
 
@@ -423,18 +423,17 @@ async function addContact() {
 }
 
 function openChat() {
-    const insertChat = document.querySelector(".chatClient")
+    const insertChat = document.querySelector('.chatClient');
     const showChat = document.querySelector('.jsChat');
 
-    
-    showChat.addEventListener("click", async (e) => {
-        e.preventDefault()
-        insertChat.classList.add("modal-show")
-        insertChat.insertAdjacentHTML("afterbegin", markupChat())
+    showChat.addEventListener('click', async e => {
+        e.preventDefault();
+        insertChat.classList.add('modal-show');
+        insertChat.insertAdjacentHTML('afterbegin', markupChat());
         // insertChat.style.display = "flex"
         await chatConnection();
-    })
-    onCloseEscModal(insertChat)
+    });
+    onCloseEscModal(insertChat);
 }
 
 // openChat()
@@ -446,7 +445,7 @@ function closeProfile(card) {
         e.preventDefault();
         closeModalHandler(card);
     });
-    onCloseEscModal(card)
+    onCloseEscModal(card);
 }
 
 function eventModal(name, text, color, addtext) {
@@ -475,5 +474,5 @@ export {
     blinkAnim,
     contactProfile,
     addContact,
-    openChat
+    openChat,
 };
