@@ -361,8 +361,6 @@ async function chatConnection() {
     function initializeWebSocket() {
         // socket = new WebSocket('ws://localhost:8000/api/chat/ws');
         // socket = new WebSocket(
-        //     'ws://addressbook-wargcorp-8f592fab.koyeb.app/api/chat/ws'
-        // );
         socket = new WebSocket(
             'ws://' + process.env.URL + '/chat/ws'
         );
