@@ -21,8 +21,8 @@ import { scaleAnimList } from './anim.js';
 import { murkupContacts, markupUser } from './markup.js';
 import { cleanIfAuthorized } from './clean.js';
 
-let BASE_URL = 'http://0.0.0.0:8000/api';
-// const BASE_URL = 'https://' + process.env.URL;
+// let BASE_URL = 'http://0.0.0.0:8000/api';
+const BASE_URL = 'https://' + process.env.URL;
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -317,24 +317,24 @@ async function postAddContact(body) {
         });
 }
 
-// async function getUserData() {
-//     return await axiosInstance
-//         .get('/users/my_profile', {
-//             headers: {
-//                 Accept: 'application/json',
-//             },
-//         })
-//         .then(resp => resp.data)
-//         .catch(error => {
-//             let err = error.response;
-//             let msg = `${err.data.detail}`;
-//             console.dir('User profile ERROR: ', error.response);
-//             eventModal(
-//                 ...messUnAuth,
-//                 msg.charAt(0).toUpperCase() + msg.slice(1)
-//             );
-//         });
-// }
+async function getUserData() {
+    return await axiosInstance
+        .get('/users/my_profile', {
+            headers: {
+                Accept: 'application/json',
+            },
+        })
+        .then(resp => resp.data)
+        .catch(error => {
+            let err = error.response;
+            let msg = `${err.data.detail}`;
+            console.dir('User profile ERROR: ', error.response);
+            eventModal(
+                ...messUnAuth,
+                msg.charAt(0).toUpperCase() + msg.slice(1)
+            );
+        });
+}
 
 const showJoinModal = () => {
     document.getElementById('chat').style.display = 'none';
@@ -359,16 +359,21 @@ async function chatConnection() {
     let socket;
 
     function initializeWebSocket() {
-        socket = new WebSocket('ws://localhost:8000/api/chat/ws');
+        // socket = new WebSocket('ws://localhost:8000/api/chat/ws');
         // socket = new WebSocket(
         //     'ws://addressbook-wargcorp-8f592fab.koyeb.app/api/chat/ws'
         // );
+        socket = new WebSocket(
+            'ws://' + process.env.URL + '/chat/ws'
+        );
+        console.dir(socket);
 
         socket.onopen = () => {
             console.log('WebSocket connection established.');
         };
 
         socket.onmessage = e => {
+            getUserData();
             const data = JSON.parse(e.data);
             const msgClass = data.isMe ? 'user-message' : 'other-message';
             const sender = data.isMe ? 'You' : data.username;
@@ -408,11 +413,13 @@ async function chatConnection() {
                         e.code +
                         '. Please rejoin the chat.'
                 );
-                showJoinModal();
+                // showJoinModal();
+                setTimeout(() => {
+                    initializeWebSocket();
+                }, 5000);
+    
+                // joinChat();
             }
-            setTimeout(() => {
-                chatConnection();
-            }, 5000);
         };
     }
 
