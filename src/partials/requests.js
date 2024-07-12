@@ -360,9 +360,8 @@ async function chatConnection() {
 
     function initializeWebSocket() {
         // socket = new WebSocket('ws://localhost:8000/api/chat/ws');
-        // socket = new WebSocket(
         socket = new WebSocket(
-            'ws://' + process.env.URL + '/chat/ws'
+            'wss://' + process.env.URL + '/chat/ws'
         );
         console.dir(socket);
 
