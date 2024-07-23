@@ -45,7 +45,7 @@ const joinChat = () => {
 function initializeWebSocket() {
     // socket = new WebSocket('ws://localhost:8000/api/chat/ws');
     socket = new WebSocket('wss://' + process.env.URL + '/chat/ws');
-    console.dir(socket);
+    // console.dir(socket);
 
     socket.onopen = () => {
         console.log('WebSocket connection established.');
