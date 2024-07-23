@@ -663,7 +663,8 @@ select {
 #contactPhone {
     display: flex;
     padding-left: 35px;
-    width: auto;
+    width: 83%;
+    height: 2.5ch;
     text-align: left;
     opacity: 0.8;
     outline: none;
@@ -1020,7 +1021,7 @@ select {
     font-weight: bold;
 }
 
-/* .addContact {
+.addContact {
     display: none;
     position: fixed;
     z-index: 1002;
@@ -1030,7 +1031,7 @@ select {
     height: 100%;
     overflow: auto;
     background-color: none;
-} */
+}
 
 .update-profile {
     display: none;

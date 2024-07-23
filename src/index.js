@@ -7,8 +7,6 @@ import {
     deleteContact,
     updateContact,
     postAddContact,
-    chatConnection,
-    sendMessage,
 } from './partials/requests.js';
 
 import {
@@ -24,6 +22,15 @@ import {
 
 import { blinkAnim, iterOneAnim, animCard } from './partials/anim';
 import { cleanContent, cleanIfAuthorized } from './partials/clean';
+
+import {
+    initializeWebSocket,
+    joinWS,
+    sendWS,
+    sendMessageWS,
+    leaveWS,
+    closeRegWS
+} from './partials/wsChat.js';
 
 // Menu after login
 const menuToggle = document.querySelector('.menu');
@@ -201,8 +208,6 @@ async function loginData() {
             await searchContacts();
             await addContact();
             openChat();
-            // await chatConnection();
-            // await sendMessage();
         });
     });
 }
@@ -431,7 +436,11 @@ function openChat() {
         insertChat.classList.add('modal-show');
         insertChat.insertAdjacentHTML('afterbegin', markupChat());
         // insertChat.style.display = "flex"
-        await chatConnection();
+        await joinWS();
+        await sendMessageWS();
+        await closeRegWS();
+        await sendWS();
+        await leaveWS();
     });
     onCloseEscModal(insertChat);
 }
