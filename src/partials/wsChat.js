@@ -1,4 +1,6 @@
 import { axiosInstance } from './requests';
+import { eventModal } from '../index.js';
+import { messUnAuth } from './msgs';
 
 let socket;
 
@@ -105,6 +107,13 @@ async function joinWS() {
         e.preventDefault();
         initializeWebSocket();
         joinChat();
+    });
+    document.getElementById('usernameInput').addEventListener('keydown', e => {
+        if (e.key == 'Enter') {
+            e.preventDefault();
+            initializeWebSocket();
+            joinChat();
+        }
     });
 }
 
