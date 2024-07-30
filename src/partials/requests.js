@@ -236,7 +236,7 @@ async function getContacts(query) {
         })
         .catch(error => {
             if (error.response && error.response.status == 400) {
-                console.dir(error);
+                // console.dir(error);
                 let msg = `${error.response.data.Detail[0].msg}`;
                 eventModal(
                     ...messOtherError,
