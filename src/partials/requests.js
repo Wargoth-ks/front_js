@@ -229,7 +229,7 @@ async function getContacts(query) {
             );
             scaleAnimList([...listData.children]);
             contactProfile(listData, response.data);
-            console.log(response.data, response.data.length);
+            // console.log(response.data, response.data.length);
             if (response.data.length == 0) {
                 eventModal('Search result', 'Not found', 'cyan');
             }
@@ -327,5 +327,5 @@ export {
     deleteContact,
     updateContact,
     postAddContact,
-    axiosInstance
+    axiosInstance,
 };
